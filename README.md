@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="goriberflagship_logo_white2.png" alt="Goriber Flagship Logo" width="220">
+  <img src="logo-dark.png" alt="Goriber Flagship Logo" width="220">
 </p>
 
 <h1 align="center">Goriber Flagship (গরিবের ফ্ল্যাগশিপ)</h1>
