@@ -1,0 +1,32 @@
+/**
+ * GORIBER FLAGSHIP (গরিবের ফ্ল্যাগশিপ) - Configuration
+ */
+
+const APP_CONFIG = {
+  // Brand Details
+  shopName: "Goriber Flagship",
+  shopNameBengali: "গরিবের ফ্ল্যাগশিপ",
+  tagline: "সেরা দামে সেরা ফ্ল্যাগশিপ স্মার্টফোন",
+
+  // Contact Information
+  whatsapp: "+8801410405664",
+  whatsappDisplay: "01410-405664",
+  facebookUrl: "https://www.facebook.com/GoriberFlagship/",
+
+  // Live Google Sheet Source
+  googleSheetUrl: "https://docs.google.com/spreadsheets/d/17qY32Y8GDPWVZ9YfjyIRvItH0nFhsr6CJDxYBqkvuVg/edit",
+  googleSheetId: "17qY32Y8GDPWVZ9YfjyIRvItH0nFhsr6CJDxYBqkvuVg",
+
+  // Downloadable PDF
+  pdfFileUrl: "goriber-flagship-prices.pdf",
+
+  // Default View: 'list' (Product Cards) or 'sheet' (Sheet / PDF View)
+  defaultView: "list",
+
+  // Customer Announcement
+  notice: "🔥 দাম ও স্টক প্রতিনিয়ত পরিবর্তনশীল। যেকোনো ফোনের বর্তমান অফার ও স্টক জানতে সরাসরি হোয়াটসঅ্যাপে মেসেজ দিন!"
+};
+
+if (typeof module !== 'undefined' && module.exports) {
+  module.exports = APP_CONFIG;
+}
