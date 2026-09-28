@@ -549,18 +549,24 @@ button {
 .products-container {
   display: grid;
   grid-template-columns: 1fr;
-  gap: 0.75rem;
+  gap: 0.85rem;
 }
 
-@media (min-width: 600px) {
+@media (min-width: 520px) {
   .products-container {
     grid-template-columns: repeat(2, 1fr);
   }
 }
 
-@media (min-width: 960px) {
+@media (min-width: 860px) {
   .products-container {
     grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+@media (min-width: 1200px) {
+  .products-container {
+    grid-template-columns: repeat(4, 1fr);
   }
 }
 
@@ -568,26 +574,64 @@ button {
   background-color: var(--bg-surface);
   border: 1px solid var(--border);
   border-radius: var(--radius-lg);
-  padding: 1rem;
+  padding: 0.85rem;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  gap: 0.85rem;
-  transition: transform 0.2s cubic-bezier(0.16, 1, 0.3, 1), border-color 0.2s ease, box-shadow 0.2s ease;
+  gap: 0.75rem;
+  transition: transform 0.22s cubic-bezier(0.16, 1, 0.3, 1), border-color 0.2s ease, box-shadow 0.2s ease;
+  position: relative;
 }
 
 .product-item:hover {
-  transform: translateY(-2px);
+  transform: translateY(-3px);
   border-color: var(--border-hover);
   box-shadow: var(--glow-card);
   background-color: var(--bg-card-hover);
 }
 
-.item-header {
+/* Phone Image Visual Showcase */
+.item-visual {
+  position: relative;
+  width: 100%;
+  height: 175px;
+  background: radial-gradient(circle at 50% 50%, rgba(255, 255, 255, 0.05) 0%, rgba(20, 17, 18, 0.75) 100%);
+  border-radius: var(--radius-md);
+  border: 1px solid rgba(111, 157, 128, 0.12);
   display: flex;
-  align-items: flex-start;
-  justify-content: space-between;
-  gap: 0.5rem;
+  align-items: center;
+  justify-content: center;
+  padding: 0.75rem 0.5rem;
+  overflow: hidden;
+}
+
+.item-img-container {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.item-img {
+  max-width: 100%;
+  max-height: 100%;
+  object-fit: contain;
+  filter: drop-shadow(0 8px 18px rgba(0, 0, 0, 0.55));
+  transition: transform 0.28s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.product-item:hover .item-img {
+  transform: scale(1.07) translateY(-2px);
+}
+
+.item-visual .brand-label {
+  position: absolute;
+  top: 0.55rem;
+  left: 0.55rem;
+  z-index: 2;
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
 }
 
 .brand-label {
@@ -597,33 +641,38 @@ button {
   letter-spacing: 0.05em;
   padding: 0.15rem 0.5rem;
   border-radius: 4px;
-  background-color: rgba(255, 255, 255, 0.05);
+  background-color: rgba(24, 21, 22, 0.85);
   color: #9ca3af;
-  border: 1px solid rgba(156, 163, 175, 0.22);
+  border: 1px solid rgba(156, 163, 175, 0.28);
 }
 
 /* Brand specific styling - unified with sleek modern grey tone */
 .brand-apple, .brand-vivo, .brand-xiaomi, .brand-oppo, .brand-honor, .brand-redmi {
   color: #9ca3af;
-  border-color: rgba(156, 163, 175, 0.22);
+  border-color: rgba(156, 163, 175, 0.28);
+}
+
+.item-body {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
 }
 
 .item-title {
   font-size: 1.02rem;
   font-weight: 700;
   color: #ffffff;
-  margin-top: 0.35rem;
   line-height: 1.3;
 }
 
 .item-specs {
   display: inline-flex;
-  font-size: 0.78rem;
+  align-self: flex-start;
+  font-size: 0.76rem;
   color: var(--sage-light);
   background: rgba(111, 157, 128, 0.1);
-  padding: 0.15rem 0.5rem;
+  padding: 0.12rem 0.45rem;
   border-radius: var(--radius-sm);
-  margin-top: 0.4rem;
   border: 1px solid var(--border);
 }
 

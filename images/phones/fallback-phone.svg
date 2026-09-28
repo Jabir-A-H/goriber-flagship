@@ -1,0 +1,32 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 240" fill="none">
+  <defs>
+    <linearGradient id="bodyGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#2a2527"/>
+      <stop offset="100%" stop-color="#181516"/>
+    </linearGradient>
+    <linearGradient id="screenGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#0b704e" stop-opacity="0.3"/>
+      <stop offset="100%" stop-color="#231f20"/>
+    </linearGradient>
+    <linearGradient id="borderGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#6f9d80" stop-opacity="0.5"/>
+      <stop offset="100%" stop-color="#231f20" stop-opacity="0.2"/>
+    </linearGradient>
+  </defs>
+
+  <!-- Phone Body -->
+  <rect x="52" y="15" width="96" height="195" rx="18" fill="url(#bodyGrad)" stroke="url(#borderGrad)" stroke-width="2"/>
+  
+  <!-- Screen Area -->
+  <rect x="57" y="24" width="86" height="177" rx="13" fill="url(#screenGrad)"/>
+  
+  <!-- Dynamic Island / Speaker Notch -->
+  <rect x="88" y="28" width="24" height="6" rx="3" fill="#181516"/>
+  
+  <!-- Center Glow Icon -->
+  <circle cx="100" cy="105" r="22" fill="#0b704e" fill-opacity="0.2"/>
+  <path d="M93 105l5 5 9-9" stroke="#6f9d80" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+  
+  <!-- Home Indicator bar -->
+  <rect x="84" y="193" width="32" height="3" rx="1.5" fill="#6f9d80" fill-opacity="0.4"/>
+</svg>

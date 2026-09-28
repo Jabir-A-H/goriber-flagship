@@ -6,6 +6,76 @@
 (function () {
   'use strict';
 
+  // Official Phone Model Image Mapping (Local high-res assets)
+  const MODEL_IMAGE_MAP = {
+    // Apple
+    'iphone 11': 'images/phones/iphone-11.jpg',
+    'iphone 12': 'images/phones/iphone-12.jpg',
+    'iphone 12 pro max': 'images/phones/iphone-12-pro-max.jpg',
+    'iphone 13 pro max': 'images/phones/iphone-13-pro-max.jpg',
+    'iphone 14': 'images/phones/iphone-14.jpg',
+    'iphone 14 pro max': 'images/phones/iphone-14-pro-max.jpg',
+
+    // Honor
+    '200': 'images/phones/honor-200.jpg',
+    'magic 5 pro': 'images/phones/magic-5-pro.jpg',
+    'magic 5 ultimate': 'images/phones/magic-5-ultimate.jpg',
+    'magic 6 pro': 'images/phones/magic-6-pro.jpg',
+    'magic 7 pro': 'images/phones/magic-7-pro.jpg',
+
+    // Oppo
+    'find x7': 'images/phones/find-x7.jpg',
+    'find x8': 'images/phones/find-x8.jpg',
+    'find x8 pro': 'images/phones/find-x8-pro.jpg',
+    'find x9': 'images/phones/find-x9.jpg',
+    'find x9 pro': 'images/phones/find-x9-pro.jpg',
+
+    // Redmi
+    'note 13 pro+': 'images/phones/note-13-proplus.jpg',
+    'note 13 pro plus': 'images/phones/note-13-proplus.jpg',
+    'k80': 'images/phones/k80.jpg',
+    'k80 pro': 'images/phones/k80-pro.jpg',
+    'k90': 'images/phones/k90.jpg',
+    'k90 pro': 'images/phones/k90-pro.jpg',
+
+    // Vivo
+    'x100': 'images/phones/x100.jpg',
+    'x100 pro': 'images/phones/x100-pro.jpg',
+    'x200': 'images/phones/x200.jpg',
+    'x200 pro mini': 'images/phones/x200-pro-mini.jpg',
+    'x200 pro': 'images/phones/x200-pro.jpg',
+    'x200 ultra': 'images/phones/x200-ultra.jpg',
+    'x300': 'images/phones/x300.jpg',
+    'x300 pro': 'images/phones/x300-pro.jpg',
+
+    // Xiaomi
+    'civi 4 pro': 'images/phones/civi-4-pro.jpg',
+    'civi 5 pro': 'images/phones/civi-5-pro.jpg',
+    '12s ultra': 'images/phones/12s-ultra.jpg',
+    '13': 'images/phones/13.jpg',
+    '13 pro': 'images/phones/13-pro.jpg',
+    '13 ultra': 'images/phones/13-ultra.jpg',
+    '14': 'images/phones/14.jpg',
+    '14 pro': 'images/phones/14-pro.jpg',
+    '15': 'images/phones/15.jpg',
+    '15 pro': 'images/phones/15-pro.jpg',
+    '15 ultra': 'images/phones/15-ultra.jpg',
+    '17 pro max': 'images/phones/17-pro-max.jpg',
+    '17 ultra': 'images/phones/17-ultra.jpg'
+  };
+
+  /**
+   * Helper: Match phone brand and model to image asset
+   */
+  function getPhoneImage(brand, model) {
+    const norm = (model || '').toLowerCase().trim();
+    if (MODEL_IMAGE_MAP[norm]) return MODEL_IMAGE_MAP[norm];
+    for (const [k, v] of Object.entries(MODEL_IMAGE_MAP)) {
+      if (norm.includes(k) || k.includes(norm)) return v;
+    }
+    return 'images/phones/fallback-phone.svg';
+  }
+
   // Fallback / Initial Data (directly from the user's Google Sheet)
   const INITIAL_PRODUCTS = [
     { brand: 'Apple', model: 'iPhone 11', ram: '128 GB', price: '20,500 ৳', numPrice: 20500 },
@@ -50,7 +120,7 @@
     { brand: 'Xiaomi', model: '17 Ultra', ram: '16/512 GB', price: '112,000 ৳', numPrice: 112000 },
     { brand: 'Xiaomi', model: '12S Ultra', ram: '12/256 GB', price: 'যোগাযোগ করুন', numPrice: 0 },
     { brand: 'Xiaomi', model: '13 Ultra', ram: '12/256 GB', price: '40,000 ৳', numPrice: 40000 }
-  ];
+  ].map(p => ({ ...p, image: getPhoneImage(p.brand, p.model) }));
 
   // Application State
   const state = {
@@ -198,7 +268,8 @@
           model,
           ram,
           price: displayPrice,
-          numPrice
+          numPrice,
+          image: getPhoneImage(brand, model)
         });
       }
     }
@@ -298,13 +369,18 @@
       const brandClass = `brand-${p.brand.toLowerCase()}`;
       const isCall = p.numPrice === 0;
       const waLink = getWhatsAppUrl(p);
+      const imgUrl = p.image || getPhoneImage(p.brand, p.model);
 
       html += `
         <article class="product-item">
-          <div>
-            <div class="item-header">
-              <span class="brand-label ${brandClass}">${escapeHtml(p.brand)}</span>
+          <div class="item-visual">
+            <span class="brand-label ${brandClass}">${escapeHtml(p.brand)}</span>
+            <div class="item-img-container">
+              <img src="${imgUrl}" alt="${escapeHtml(p.brand)} ${escapeHtml(p.model)}" class="item-img" loading="lazy" onerror="this.onerror=null; this.src='images/phones/fallback-phone.svg';" />
             </div>
+          </div>
+
+          <div class="item-body">
             <h3 class="item-title">${escapeHtml(p.model)}</h3>
             <span class="item-specs">${escapeHtml(p.ram)}</span>
           </div>
