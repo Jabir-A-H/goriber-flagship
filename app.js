@@ -90,8 +90,7 @@
     // Sheet / PDF Actions
     sheetIframe: document.getElementById('sheetIframe'),
     sheetSpinner: document.getElementById('sheetSpinner'),
-    btnReloadSheet: document.getElementById('btnReloadSheet'),
-    btnPrint: document.getElementById('btnPrint')
+    btnReloadSheet: document.getElementById('btnReloadSheet')
   };
 
   /**
@@ -429,13 +428,6 @@
         setTimeout(() => {
           if (dom.sheetSpinner) dom.sheetSpinner.classList.add('hidden');
         }, 1500);
-      });
-    }
-
-    // Print Button
-    if (dom.btnPrint) {
-      dom.btnPrint.addEventListener('click', () => {
-        window.print();
       });
     }
 

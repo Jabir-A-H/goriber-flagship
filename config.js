@@ -6,7 +6,7 @@ const APP_CONFIG = {
   // Brand Details
   shopName: "Goriber Flagship",
   shopNameBengali: "গরিবের ফ্ল্যাগশিপ",
-  tagline: "সেরা দামে সেরা ফ্ল্যাগশিপ স্মার্টফোন",
+  tagline: "ন্যায্য দামে, উচ্চ গুণে, গরীবের ফ্ল্যাগশিপ সবার প্রাণে",
 
   // Contact Information
   whatsapp: "+8801410405664",
