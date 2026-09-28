@@ -1,51 +1,51 @@
 /* ==========================================================================
-   GORIBER FLAGSHIP - Premium Modern Designer Greenish Stylesheet
-   Luxury Obsidian & Emerald / Jade Aesthetic
+   GORIBER FLAGSHIP - Signature Custom Designer Palette
+   Colors: #0b704e (Deep Emerald) | #6f9d80 (Sage) | #231f20 (Charcoal) | #fb8b01 (Amber)
    ========================================================================== */
 
 :root {
-  /* Surface & Background (Obsidian & Deep Jade Charcoal) */
-  --bg-main: #060a08;
-  --bg-surface: #0a130e;
-  --bg-card: #0f1c15;
-  --bg-card-hover: #15271d;
-  --bg-elevated: #1a3225;
+  /* Brand Core Colors */
+  --emerald: #0b704e;
+  --emerald-dark: #074e36;
+  --emerald-light: #0f8f64;
+  --sage: #6f9d80;
+  --sage-light: #a8c7b4;
+  --sage-pale: #e4efe8;
+  --charcoal: #231f20;
+  --charcoal-deep: #181516;
+  --charcoal-card: #2a2527;
+  --charcoal-card-hover: #332d30;
+  --charcoal-elevated: #3d3639;
+  --amber: #fb8b01;
+  --amber-hover: #e07b00;
 
-  /* Designer Greenish Spectrum */
-  --primary-green: #10b981;
-  --emerald: #059669;
-  --mint-vivid: #00f59b;
-  --mint-neon: #34d399;
-  --mint-soft: #a7f3d0;
-  --mint-pale: #ecfdf5;
-
-  /* Accents & Complements */
-  --accent-gold: #f59e0b;
-  --accent-rose: #fb7185;
-  --accent-purple: #c084fc;
-  --wa: #25d366;
-  --wa-dark: #128c7e;
-
-  /* Glows & Radiance */
-  --glow-green: 0 0 24px rgba(16, 185, 129, 0.28);
-  --glow-mint: 0 0 16px rgba(52, 211, 153, 0.22);
-  --glow-card: 0 8px 30px rgba(0, 0, 0, 0.45), 0 0 16px rgba(16, 185, 129, 0.12);
+  /* Surfaces & Backgrounds */
+  --bg-main: var(--charcoal-deep);
+  --bg-surface: var(--charcoal);
+  --bg-card: var(--charcoal-card);
+  --bg-card-hover: var(--charcoal-card-hover);
+  --bg-elevated: var(--charcoal-elevated);
 
   /* Typography Colors */
-  --text-primary: #f2fbf6;
-  --text-secondary: #9cb5a8;
-  --text-muted: #5d7568;
+  --text-primary: #ffffff;
+  --text-secondary: var(--sage-light);
+  --text-muted: var(--sage);
 
   /* Borders & Dividers */
-  --border: rgba(52, 211, 153, 0.12);
-  --border-hover: rgba(52, 211, 153, 0.35);
-  --border-highlight: rgba(0, 245, 155, 0.5);
+  --border: rgba(111, 157, 128, 0.18);
+  --border-hover: rgba(111, 157, 128, 0.42);
+  --border-amber: rgba(251, 139, 1, 0.45);
+  --border-emerald: rgba(11, 112, 78, 0.5);
+
+  /* Glows */
+  --glow-emerald: 0 0 20px rgba(11, 112, 78, 0.3);
+  --glow-amber: 0 0 16px rgba(251, 139, 1, 0.28);
+  --glow-card: 0 8px 30px rgba(0, 0, 0, 0.5), 0 0 16px rgba(11, 112, 78, 0.15);
 
   /* Radii */
   --radius-sm: 8px;
   --radius-md: 12px;
   --radius-lg: 16px;
-  --radius-xl: 20px;
   --radius-full: 9999px;
 
   /* Fonts */
@@ -71,9 +71,9 @@ body {
   min-height: 100dvh;
   display: flex;
   flex-direction: column;
-  background: radial-gradient(circle at 50% -10%, #0d281a 0%, #07120c 45%, var(--bg-main) 80%);
+  background: radial-gradient(circle at 50% -10%, rgba(11, 112, 78, 0.22) 0%, var(--charcoal) 50%, var(--bg-main) 90%);
   background-attachment: fixed;
-  padding-bottom: 74px; /* Space for mobile sticky bottom bar */
+  padding-bottom: 74px; /* Space for mobile floating bar */
 }
 
 @media (min-width: 769px) {
@@ -113,11 +113,11 @@ button {
 }
 
 /* ==========================================================================
-   Announcement Banner (Emerald Green Luxe)
+   Announcement Banner
    ========================================================================== */
 .announcement-banner {
-  background: linear-gradient(90deg, #071911 0%, #0c281c 50%, #071911 100%);
-  border-bottom: 1px solid rgba(16, 185, 129, 0.2);
+  background: linear-gradient(90deg, #181516 0%, rgba(11, 112, 78, 0.35) 50%, #181516 100%);
+  border-bottom: 1px solid var(--border);
   padding: 0.42rem 1rem;
   font-size: 0.82rem;
 }
@@ -127,7 +127,7 @@ button {
   align-items: center;
   justify-content: center;
   gap: 0.5rem;
-  color: var(--mint-soft);
+  color: var(--sage-light);
   text-align: center;
 }
 
@@ -135,8 +135,8 @@ button {
   width: 7px;
   height: 7px;
   border-radius: 50%;
-  background-color: var(--mint-vivid);
-  box-shadow: 0 0 10px var(--mint-vivid);
+  background-color: var(--amber);
+  box-shadow: 0 0 10px var(--amber);
   animation: pulse-ring 2s infinite ease-in-out;
   flex-shrink: 0;
 }
@@ -147,13 +147,13 @@ button {
 }
 
 /* ==========================================================================
-   Clean Navbar
+   Navbar
    ========================================================================== */
 .navbar {
   position: sticky;
   top: 0;
   z-index: 100;
-  background-color: rgba(6, 10, 8, 0.88);
+  background-color: rgba(35, 31, 32, 0.92);
   backdrop-filter: blur(18px);
   -webkit-backdrop-filter: blur(18px);
   border-bottom: 1px solid var(--border);
@@ -180,7 +180,7 @@ button {
   display: flex;
   align-items: center;
   justify-content: center;
-  filter: drop-shadow(0 2px 10px rgba(16, 185, 129, 0.35));
+  filter: drop-shadow(0 2px 10px rgba(11, 112, 78, 0.4));
 }
 
 .brand-icon svg,
@@ -206,8 +206,7 @@ button {
 .brand-tagline {
   display: block;
   font-size: 0.75rem;
-  color: var(--mint-soft);
-  opacity: 0.85;
+  color: var(--sage);
 }
 
 .nav-actions {
@@ -253,16 +252,15 @@ button {
 }
 
 .btn-wa-pill {
-  background: linear-gradient(135deg, rgba(37, 211, 102, 0.15) 0%, rgba(16, 185, 129, 0.15) 100%);
-  border: 1px solid rgba(37, 211, 102, 0.35);
+  background: rgba(11, 112, 78, 0.25);
+  border: 1px solid var(--border-emerald);
   color: #4ade80;
 }
 
 .btn-wa-pill:hover {
-  background: linear-gradient(135deg, #10b981 0%, #059669 100%);
-  color: #03170e;
-  font-weight: 700;
-  box-shadow: 0 4px 16px rgba(16, 185, 129, 0.35);
+  background: var(--emerald);
+  color: #ffffff;
+  box-shadow: var(--glow-emerald);
   transform: translateY(-1px);
 }
 
@@ -293,9 +291,9 @@ button {
   gap: 0.5rem;
   font-size: 0.78rem;
   font-weight: 600;
-  color: var(--mint-soft);
-  background: rgba(16, 185, 129, 0.1);
-  border: 1px solid rgba(52, 211, 153, 0.25);
+  color: var(--sage-light);
+  background: rgba(11, 112, 78, 0.2);
+  border: 1px solid var(--border-emerald);
   padding: 0.25rem 0.65rem;
   border-radius: var(--radius-full);
   margin-bottom: 0.6rem;
@@ -305,13 +303,13 @@ button {
   width: 6px;
   height: 6px;
   border-radius: 50%;
-  background-color: var(--mint-vivid);
-  box-shadow: 0 0 8px var(--mint-vivid);
+  background-color: var(--amber);
+  box-shadow: 0 0 8px var(--amber);
 }
 
 .badge-date {
-  color: var(--text-muted);
-  border-left: 1px solid rgba(52, 211, 153, 0.2);
+  color: var(--sage);
+  border-left: 1px solid var(--border);
   padding-left: 0.5rem;
 }
 
@@ -338,7 +336,7 @@ button {
   gap: 0.6rem;
 }
 
-/* Tab Pills (Designer Green Switch) */
+/* Tab Pills */
 .tab-group {
   display: inline-flex;
   background-color: var(--bg-surface);
@@ -365,10 +363,10 @@ button {
 }
 
 .tab-pill.active {
-  background: linear-gradient(135deg, #10b981 0%, #059669 100%);
-  color: #03170e;
+  background: linear-gradient(135deg, var(--emerald) 0%, var(--emerald-dark) 100%);
+  color: #ffffff;
   font-weight: 700;
-  box-shadow: 0 3px 12px rgba(16, 185, 129, 0.35);
+  box-shadow: var(--glow-emerald);
 }
 
 .doc-actions {
@@ -377,17 +375,18 @@ button {
   gap: 0.45rem;
 }
 
+/* Download Button in Signature Amber */
 .btn-download {
-  background: linear-gradient(135deg, #10b981 0%, #059669 100%);
-  color: #03170e;
+  background: linear-gradient(135deg, var(--amber) 0%, var(--amber-hover) 100%);
+  color: #231f20;
   font-weight: 700;
-  box-shadow: 0 3px 12px rgba(16, 185, 129, 0.3);
+  box-shadow: 0 3px 12px rgba(251, 139, 1, 0.35);
 }
 
 .btn-download:hover {
-  background: linear-gradient(135deg, #34d399 0%, #10b981 100%);
+  background: linear-gradient(135deg, #ffa02e 0%, var(--amber) 100%);
   transform: translateY(-1px);
-  box-shadow: 0 4px 18px rgba(16, 185, 129, 0.45);
+  box-shadow: 0 5px 18px rgba(251, 139, 1, 0.5);
 }
 
 /* ==========================================================================
@@ -410,7 +409,7 @@ button {
   display: flex;
   flex-direction: column;
   gap: 0.85rem;
-  box-shadow: 0 4px 24px rgba(0, 0, 0, 0.35);
+  box-shadow: 0 4px 24px rgba(0, 0, 0, 0.4);
 }
 
 .search-row {
@@ -435,7 +434,7 @@ button {
 .search-svg {
   position: absolute;
   left: 0.9rem;
-  color: var(--text-muted);
+  color: var(--sage);
   pointer-events: none;
 }
 
@@ -452,14 +451,14 @@ button {
 }
 
 .search-field input:focus {
-  border-color: var(--mint-neon);
-  box-shadow: 0 0 0 3px rgba(16, 185, 129, 0.18);
+  border-color: var(--emerald-light);
+  box-shadow: 0 0 0 3px rgba(11, 112, 78, 0.25);
 }
 
 .btn-clear {
   position: absolute;
   right: 0.75rem;
-  color: var(--text-muted);
+  color: var(--sage);
   font-size: 1.2rem;
   line-height: 1;
   padding: 0.2rem;
@@ -482,7 +481,7 @@ button {
 }
 
 .sort-field select:focus {
-  border-color: var(--mint-neon);
+  border-color: var(--emerald-light);
 }
 
 /* Brand Filter Pills */
@@ -516,11 +515,11 @@ button {
 }
 
 .brand-pill.active {
-  background: linear-gradient(135deg, #10b981 0%, #059669 100%);
-  color: #03170e;
+  background: var(--emerald);
+  color: #ffffff;
   font-weight: 700;
-  border-color: transparent;
-  box-shadow: 0 2px 10px rgba(16, 185, 129, 0.3);
+  border-color: var(--border-emerald);
+  box-shadow: var(--glow-emerald);
 }
 
 .meta-row {
@@ -529,18 +528,18 @@ button {
   justify-content: space-between;
   gap: 1rem;
   font-size: 0.8rem;
-  color: var(--text-muted);
+  color: var(--sage);
   margin-block: 0.85rem 0.75rem;
   padding-inline: 0.25rem;
   flex-wrap: wrap;
 }
 
 .meta-hint {
-  color: var(--mint-soft);
+  color: var(--amber);
 }
 
 /* ==========================================================================
-   Product Cards (Designer Emerald Slate)
+   Product Cards
    ========================================================================== */
 .products-container {
   display: grid;
@@ -594,17 +593,17 @@ button {
   padding: 0.15rem 0.45rem;
   border-radius: 4px;
   background-color: var(--bg-elevated);
-  color: var(--mint-neon);
-  border: 1px solid rgba(52, 211, 153, 0.2);
+  color: var(--sage-light);
+  border: 1px solid var(--border);
 }
 
 /* Brand specific styling */
-.brand-apple { color: #f2fbf6; border-color: rgba(255, 255, 255, 0.2); }
-.brand-vivo { color: var(--mint-neon); border-color: rgba(52, 211, 153, 0.3); }
-.brand-xiaomi { color: var(--accent-gold); border-color: rgba(245, 158, 11, 0.3); }
-.brand-oppo { color: #34d399; border-color: rgba(52, 211, 153, 0.3); }
-.brand-honor { color: var(--accent-purple); border-color: rgba(192, 132, 252, 0.3); }
-.brand-redmi { color: var(--accent-rose); border-color: rgba(251, 113, 133, 0.3); }
+.brand-apple { color: #ffffff; border-color: rgba(255, 255, 255, 0.25); }
+.brand-vivo { color: #60a5fa; border-color: rgba(96, 165, 250, 0.35); }
+.brand-xiaomi { color: var(--amber); border-color: var(--border-amber); }
+.brand-oppo { color: #34d399; border-color: rgba(52, 211, 153, 0.35); }
+.brand-honor { color: #c084fc; border-color: rgba(192, 132, 252, 0.35); }
+.brand-redmi { color: #fb7185; border-color: rgba(251, 113, 133, 0.35); }
 
 .item-title {
   font-size: 1.02rem;
@@ -617,12 +616,12 @@ button {
 .item-specs {
   display: inline-flex;
   font-size: 0.78rem;
-  color: var(--text-secondary);
-  background: rgba(16, 185, 129, 0.06);
+  color: var(--sage-light);
+  background: rgba(111, 157, 128, 0.1);
   padding: 0.15rem 0.5rem;
   border-radius: var(--radius-sm);
   margin-top: 0.4rem;
-  border: 1px solid rgba(52, 211, 153, 0.12);
+  border: 1px solid var(--border);
 }
 
 .item-footer {
@@ -641,28 +640,29 @@ button {
 
 .price-subtext {
   font-size: 0.65rem;
-  color: var(--text-muted);
+  color: var(--sage);
   text-transform: uppercase;
 }
 
+/* Price in Signature Luminous Amber */
 .price-tag {
-  font-size: 1.24rem;
+  font-size: 1.25rem;
   font-weight: 800;
-  color: var(--mint-vivid);
+  color: var(--amber);
   letter-spacing: -0.01em;
 }
 
 .price-tag.price-call {
   font-size: 0.95rem;
-  color: var(--accent-gold);
+  color: var(--sage-light);
 }
 
 .btn-order-wa {
   display: inline-flex;
   align-items: center;
   gap: 0.3rem;
-  background-color: rgba(37, 211, 102, 0.1);
-  border: 1px solid rgba(37, 211, 102, 0.28);
+  background-color: rgba(11, 112, 78, 0.2);
+  border: 1px solid var(--border-emerald);
   color: #4ade80;
   padding: 0.4rem 0.65rem;
   border-radius: var(--radius-sm);
@@ -673,9 +673,9 @@ button {
 }
 
 .btn-order-wa:hover {
-  background-color: var(--wa);
+  background-color: var(--emerald);
   color: #ffffff;
-  border-color: var(--wa);
+  border-color: var(--emerald);
 }
 
 /* Empty Result */
@@ -686,7 +686,7 @@ button {
   background-color: var(--bg-surface);
   border: 1px dashed var(--border);
   border-radius: var(--radius-lg);
-  color: var(--text-muted);
+  color: var(--sage);
 }
 
 /* ==========================================================================
@@ -697,7 +697,7 @@ button {
   border: 1px solid var(--border);
   border-radius: var(--radius-lg);
   overflow: hidden;
-  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.45);
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.5);
 }
 
 .sheet-viewer-header {
@@ -715,7 +715,7 @@ button {
   align-items: center;
   gap: 0.5rem;
   font-weight: 600;
-  color: #d1fae5;
+  color: var(--sage-light);
 }
 
 .sheet-header-actions {
@@ -732,7 +732,7 @@ button {
   position: relative;
   width: 100%;
   height: clamp(550px, 75dvh, 850px);
-  background-color: #0b1410;
+  background-color: var(--charcoal-deep);
 }
 
 .sheet-iframe-wrapper iframe {
@@ -763,8 +763,8 @@ button {
 .spinner-ring {
   width: 36px;
   height: 36px;
-  border: 3px solid rgba(16, 185, 129, 0.15);
-  border-top-color: var(--mint-neon);
+  border: 3px solid rgba(11, 112, 78, 0.2);
+  border-top-color: var(--amber);
   border-radius: 50%;
   animation: spin-ring 0.8s linear infinite;
 }
@@ -778,11 +778,11 @@ button {
   background-color: var(--bg-card);
   border-top: 1px solid var(--border);
   font-size: 0.8rem;
-  color: var(--text-muted);
+  color: var(--sage);
 }
 
 .sheet-footer-notice a {
-  color: var(--mint-neon);
+  color: var(--amber);
   text-decoration: underline;
 }
 
@@ -828,9 +828,9 @@ button {
   flex-shrink: 0;
 }
 
-.delivery { background-color: rgba(16, 185, 129, 0.14); color: var(--mint-neon); }
-.authentic { background-color: rgba(52, 211, 153, 0.14); color: var(--primary-green); }
-.support { background-color: rgba(37, 211, 102, 0.14); color: #4ade80; }
+.delivery { background-color: rgba(11, 112, 78, 0.2); color: var(--emerald-light); }
+.authentic { background-color: rgba(251, 139, 1, 0.15); color: var(--amber); }
+.support { background-color: rgba(111, 157, 128, 0.2); color: var(--sage-light); }
 
 .trust-card h4 {
   font-size: 0.9rem;
@@ -860,7 +860,7 @@ button {
   left: 0;
   right: 0;
   z-index: 99;
-  background-color: rgba(6, 10, 8, 0.95);
+  background-color: rgba(35, 31, 32, 0.96);
   backdrop-filter: blur(18px);
   -webkit-backdrop-filter: blur(18px);
   border-top: 1px solid var(--border);
@@ -883,7 +883,7 @@ button {
   gap: 0.25rem;
   font-size: 0.7rem;
   font-weight: 600;
-  color: var(--text-muted);
+  color: var(--sage);
   transition: transform 0.15s ease;
 }
 
@@ -892,7 +892,7 @@ button {
 }
 
 .m-wa { color: #4ade80; }
-.m-pdf { color: var(--mint-neon); }
+.m-pdf { color: var(--amber); }
 .m-fb { color: #60a5fa; }
 
 /* ==========================================================================
@@ -905,7 +905,7 @@ button {
   margin-top: 2rem;
   text-align: center;
   font-size: 0.82rem;
-  color: var(--text-muted);
+  color: var(--sage);
 }
 
 .footer-inner {
@@ -920,5 +920,5 @@ button {
 
 .footer-note {
   font-size: 0.74rem;
-  color: var(--text-muted);
+  color: var(--sage);
 }
