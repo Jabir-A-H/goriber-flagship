@@ -1,35 +1,51 @@
 /* ==========================================================================
-   GORIBER FLAGSHIP - Modern Clean Flagship Stylesheet
+   GORIBER FLAGSHIP - Premium Modern Designer Greenish Stylesheet
+   Luxury Obsidian & Emerald / Jade Aesthetic
    ========================================================================== */
 
 :root {
-  /* Surface & Background */
-  --bg-main: #090d16;
-  --bg-surface: #0f1523;
-  --bg-card: #151c2e;
-  --bg-card-hover: #1b243b;
-  --bg-elevated: #1f2a44;
+  /* Surface & Background (Obsidian & Deep Jade Charcoal) */
+  --bg-main: #060a08;
+  --bg-surface: #0a130e;
+  --bg-card: #0f1c15;
+  --bg-card-hover: #15271d;
+  --bg-elevated: #1a3225;
 
-  /* Accents */
-  --cyan: #38bdf8;
-  --cyan-glow: rgba(56, 189, 248, 0.25);
-  --blue: #2563eb;
-  --emerald: #10b981;
-  --amber: #f59e0b;
+  /* Designer Greenish Spectrum */
+  --primary-green: #10b981;
+  --emerald: #059669;
+  --mint-vivid: #00f59b;
+  --mint-neon: #34d399;
+  --mint-soft: #a7f3d0;
+  --mint-pale: #ecfdf5;
+
+  /* Accents & Complements */
+  --accent-gold: #f59e0b;
+  --accent-rose: #fb7185;
+  --accent-purple: #c084fc;
   --wa: #25d366;
   --wa-dark: #128c7e;
 
-  /* Text & Lines */
-  --text-primary: #f8fafc;
-  --text-secondary: #94a3b8;
-  --text-muted: #64748b;
-  --border: rgba(255, 255, 255, 0.08);
-  --border-hover: rgba(255, 255, 255, 0.16);
+  /* Glows & Radiance */
+  --glow-green: 0 0 24px rgba(16, 185, 129, 0.28);
+  --glow-mint: 0 0 16px rgba(52, 211, 153, 0.22);
+  --glow-card: 0 8px 30px rgba(0, 0, 0, 0.45), 0 0 16px rgba(16, 185, 129, 0.12);
 
-  /* Geometry */
+  /* Typography Colors */
+  --text-primary: #f2fbf6;
+  --text-secondary: #9cb5a8;
+  --text-muted: #5d7568;
+
+  /* Borders & Dividers */
+  --border: rgba(52, 211, 153, 0.12);
+  --border-hover: rgba(52, 211, 153, 0.35);
+  --border-highlight: rgba(0, 245, 155, 0.5);
+
+  /* Radii */
   --radius-sm: 8px;
   --radius-md: 12px;
   --radius-lg: 16px;
+  --radius-xl: 20px;
   --radius-full: 9999px;
 
   /* Fonts */
@@ -55,9 +71,9 @@ body {
   min-height: 100dvh;
   display: flex;
   flex-direction: column;
-  background: radial-gradient(circle at 50% 0%, #151e33 0%, var(--bg-main) 70%);
+  background: radial-gradient(circle at 50% -10%, #0d281a 0%, #07120c 45%, var(--bg-main) 80%);
   background-attachment: fixed;
-  padding-bottom: 74px; /* Space for mobile floating bottom bar */
+  padding-bottom: 74px; /* Space for mobile sticky bottom bar */
 }
 
 @media (min-width: 769px) {
@@ -97,12 +113,12 @@ button {
 }
 
 /* ==========================================================================
-   Announcement Banner
+   Announcement Banner (Emerald Green Luxe)
    ========================================================================== */
 .announcement-banner {
-  background: linear-gradient(90deg, #0e1e35 0%, #0c1729 50%, #0e1e35 100%);
-  border-bottom: 1px solid rgba(56, 189, 248, 0.12);
-  padding: 0.4rem 1rem;
+  background: linear-gradient(90deg, #071911 0%, #0c281c 50%, #071911 100%);
+  border-bottom: 1px solid rgba(16, 185, 129, 0.2);
+  padding: 0.42rem 1rem;
   font-size: 0.82rem;
 }
 
@@ -111,7 +127,7 @@ button {
   align-items: center;
   justify-content: center;
   gap: 0.5rem;
-  color: #bae6fd;
+  color: var(--mint-soft);
   text-align: center;
 }
 
@@ -119,15 +135,15 @@ button {
   width: 7px;
   height: 7px;
   border-radius: 50%;
-  background-color: var(--emerald);
-  box-shadow: 0 0 8px var(--emerald);
+  background-color: var(--mint-vivid);
+  box-shadow: 0 0 10px var(--mint-vivid);
   animation: pulse-ring 2s infinite ease-in-out;
   flex-shrink: 0;
 }
 
 @keyframes pulse-ring {
   0%, 100% { opacity: 1; transform: scale(1); }
-  50% { opacity: 0.4; transform: scale(0.85); }
+  50% { opacity: 0.45; transform: scale(0.85); }
 }
 
 /* ==========================================================================
@@ -137,9 +153,9 @@ button {
   position: sticky;
   top: 0;
   z-index: 100;
-  background-color: rgba(9, 13, 22, 0.85);
-  backdrop-filter: blur(16px);
-  -webkit-backdrop-filter: blur(16px);
+  background-color: rgba(6, 10, 8, 0.88);
+  backdrop-filter: blur(18px);
+  -webkit-backdrop-filter: blur(18px);
   border-bottom: 1px solid var(--border);
   padding-block: 0.75rem;
 }
@@ -158,13 +174,13 @@ button {
 }
 
 .brand-icon {
-  width: 42px;
-  height: 42px;
+  width: 44px;
+  height: 44px;
   flex-shrink: 0;
   display: flex;
   align-items: center;
   justify-content: center;
-  filter: drop-shadow(0 2px 8px rgba(56, 189, 248, 0.25));
+  filter: drop-shadow(0 2px 10px rgba(16, 185, 129, 0.35));
 }
 
 .brand-icon svg,
@@ -174,10 +190,9 @@ button {
   object-fit: contain;
 }
 
-.brand-title-row {
+.brand-info {
   display: flex;
-  align-items: center;
-  gap: 0.45rem;
+  flex-direction: column;
 }
 
 .brand-name {
@@ -188,20 +203,11 @@ button {
   letter-spacing: -0.01em;
 }
 
-.location-tag {
-  font-size: 0.7rem;
-  font-weight: 600;
-  color: var(--cyan);
-  background-color: rgba(56, 189, 248, 0.1);
-  border: 1px solid rgba(56, 189, 248, 0.25);
-  padding: 0.1rem 0.45rem;
-  border-radius: var(--radius-full);
-}
-
 .brand-tagline {
   display: block;
-  font-size: 0.76rem;
-  color: var(--text-muted);
+  font-size: 0.75rem;
+  color: var(--mint-soft);
+  opacity: 0.85;
 }
 
 .nav-actions {
@@ -220,7 +226,7 @@ button {
   }
 }
 
-/* Clean Buttons */
+/* Designer Buttons */
 .btn {
   display: inline-flex;
   align-items: center;
@@ -228,7 +234,7 @@ button {
   gap: 0.45rem;
   font-size: 0.84rem;
   font-weight: 600;
-  padding: 0.5rem 0.85rem;
+  padding: 0.5rem 0.9rem;
   border-radius: var(--radius-md);
   transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
   white-space: nowrap;
@@ -247,30 +253,17 @@ button {
 }
 
 .btn-wa-pill {
-  background-color: rgba(37, 211, 102, 0.12);
-  border: 1px solid rgba(37, 211, 102, 0.3);
+  background: linear-gradient(135deg, rgba(37, 211, 102, 0.15) 0%, rgba(16, 185, 129, 0.15) 100%);
+  border: 1px solid rgba(37, 211, 102, 0.35);
   color: #4ade80;
 }
 
 .btn-wa-pill:hover {
-  background-color: var(--wa);
-  color: #ffffff;
-  box-shadow: 0 4px 12px rgba(37, 211, 102, 0.3);
-}
-
-.btn-call-pill {
-  background: linear-gradient(135deg, #0ea5e9 0%, #2563eb 100%);
-  color: #ffffff;
-  box-shadow: 0 3px 10px rgba(37, 99, 235, 0.3);
-}
-
-.btn-call-pill:hover {
-  background: linear-gradient(135deg, #38bdf8 0%, #1d4ed8 100%);
-  box-shadow: 0 4px 16px rgba(37, 99, 235, 0.45);
-}
-
-.call-number {
+  background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+  color: #03170e;
   font-weight: 700;
+  box-shadow: 0 4px 16px rgba(16, 185, 129, 0.35);
+  transform: translateY(-1px);
 }
 
 /* ==========================================================================
@@ -300,9 +293,9 @@ button {
   gap: 0.5rem;
   font-size: 0.78rem;
   font-weight: 600;
-  color: #7dd3fc;
-  background: rgba(14, 165, 233, 0.1);
-  border: 1px solid rgba(56, 189, 248, 0.2);
+  color: var(--mint-soft);
+  background: rgba(16, 185, 129, 0.1);
+  border: 1px solid rgba(52, 211, 153, 0.25);
   padding: 0.25rem 0.65rem;
   border-radius: var(--radius-full);
   margin-bottom: 0.6rem;
@@ -312,13 +305,13 @@ button {
   width: 6px;
   height: 6px;
   border-radius: 50%;
-  background-color: var(--emerald);
-  box-shadow: 0 0 6px var(--emerald);
+  background-color: var(--mint-vivid);
+  box-shadow: 0 0 8px var(--mint-vivid);
 }
 
 .badge-date {
   color: var(--text-muted);
-  border-left: 1px solid rgba(255, 255, 255, 0.15);
+  border-left: 1px solid rgba(52, 211, 153, 0.2);
   padding-left: 0.5rem;
 }
 
@@ -345,7 +338,7 @@ button {
   gap: 0.6rem;
 }
 
-/* Tab Pills */
+/* Tab Pills (Designer Green Switch) */
 .tab-group {
   display: inline-flex;
   background-color: var(--bg-surface);
@@ -372,10 +365,10 @@ button {
 }
 
 .tab-pill.active {
-  background-color: var(--cyan);
-  color: #050b14;
+  background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+  color: #03170e;
   font-weight: 700;
-  box-shadow: 0 2px 8px var(--cyan-glow);
+  box-shadow: 0 3px 12px rgba(16, 185, 129, 0.35);
 }
 
 .doc-actions {
@@ -385,25 +378,16 @@ button {
 }
 
 .btn-download {
-  background-color: rgba(16, 185, 129, 0.15);
-  border: 1px solid rgba(16, 185, 129, 0.35);
-  color: #34d399;
+  background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+  color: #03170e;
+  font-weight: 700;
+  box-shadow: 0 3px 12px rgba(16, 185, 129, 0.3);
 }
 
 .btn-download:hover {
-  background-color: var(--emerald);
-  color: #ffffff;
-}
-
-.btn-secondary-action {
-  background-color: var(--bg-surface);
-  border: 1px solid var(--border);
-  color: var(--text-secondary);
-}
-
-.btn-secondary-action:hover {
-  color: #ffffff;
-  border-color: var(--border-hover);
+  background: linear-gradient(135deg, #34d399 0%, #10b981 100%);
+  transform: translateY(-1px);
+  box-shadow: 0 4px 18px rgba(16, 185, 129, 0.45);
 }
 
 /* ==========================================================================
@@ -426,7 +410,7 @@ button {
   display: flex;
   flex-direction: column;
   gap: 0.85rem;
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.25);
+  box-shadow: 0 4px 24px rgba(0, 0, 0, 0.35);
 }
 
 .search-row {
@@ -468,8 +452,8 @@ button {
 }
 
 .search-field input:focus {
-  border-color: var(--cyan);
-  box-shadow: 0 0 0 3px rgba(56, 189, 248, 0.15);
+  border-color: var(--mint-neon);
+  box-shadow: 0 0 0 3px rgba(16, 185, 129, 0.18);
 }
 
 .btn-clear {
@@ -498,7 +482,7 @@ button {
 }
 
 .sort-field select:focus {
-  border-color: var(--cyan);
+  border-color: var(--mint-neon);
 }
 
 /* Brand Filter Pills */
@@ -532,11 +516,11 @@ button {
 }
 
 .brand-pill.active {
-  background-color: #ffffff;
-  color: #090d16;
+  background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+  color: #03170e;
   font-weight: 700;
-  border-color: #ffffff;
-  box-shadow: 0 2px 8px rgba(255, 255, 255, 0.2);
+  border-color: transparent;
+  box-shadow: 0 2px 10px rgba(16, 185, 129, 0.3);
 }
 
 .meta-row {
@@ -552,11 +536,11 @@ button {
 }
 
 .meta-hint {
-  color: #fcd34d;
+  color: var(--mint-soft);
 }
 
 /* ==========================================================================
-   Product Cards
+   Product Cards (Designer Emerald Slate)
    ========================================================================== */
 .products-container {
   display: grid;
@@ -590,8 +574,8 @@ button {
 
 .product-item:hover {
   transform: translateY(-2px);
-  border-color: rgba(56, 189, 248, 0.35);
-  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.35), 0 0 12px rgba(56, 189, 248, 0.1);
+  border-color: var(--border-hover);
+  box-shadow: var(--glow-card);
   background-color: var(--bg-card-hover);
 }
 
@@ -610,17 +594,17 @@ button {
   padding: 0.15rem 0.45rem;
   border-radius: 4px;
   background-color: var(--bg-elevated);
-  color: var(--cyan);
-  border: 1px solid rgba(56, 189, 248, 0.2);
+  color: var(--mint-neon);
+  border: 1px solid rgba(52, 211, 153, 0.2);
 }
 
 /* Brand specific styling */
-.brand-apple { color: #f8fafc; border-color: rgba(255, 255, 255, 0.2); }
-.brand-vivo { color: #60a5fa; border-color: rgba(96, 165, 250, 0.3); }
-.brand-xiaomi { color: #fb923c; border-color: rgba(251, 146, 60, 0.3); }
+.brand-apple { color: #f2fbf6; border-color: rgba(255, 255, 255, 0.2); }
+.brand-vivo { color: var(--mint-neon); border-color: rgba(52, 211, 153, 0.3); }
+.brand-xiaomi { color: var(--accent-gold); border-color: rgba(245, 158, 11, 0.3); }
 .brand-oppo { color: #34d399; border-color: rgba(52, 211, 153, 0.3); }
-.brand-honor { color: #c084fc; border-color: rgba(192, 132, 252, 0.3); }
-.brand-redmi { color: #f87171; border-color: rgba(248, 113, 113, 0.3); }
+.brand-honor { color: var(--accent-purple); border-color: rgba(192, 132, 252, 0.3); }
+.brand-redmi { color: var(--accent-rose); border-color: rgba(251, 113, 133, 0.3); }
 
 .item-title {
   font-size: 1.02rem;
@@ -634,11 +618,11 @@ button {
   display: inline-flex;
   font-size: 0.78rem;
   color: var(--text-secondary);
-  background: rgba(255, 255, 255, 0.05);
+  background: rgba(16, 185, 129, 0.06);
   padding: 0.15rem 0.5rem;
   border-radius: var(--radius-sm);
   margin-top: 0.4rem;
-  border: 1px solid rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(52, 211, 153, 0.12);
 }
 
 .item-footer {
@@ -662,15 +646,15 @@ button {
 }
 
 .price-tag {
-  font-size: 1.22rem;
+  font-size: 1.24rem;
   font-weight: 800;
-  color: var(--cyan);
+  color: var(--mint-vivid);
   letter-spacing: -0.01em;
 }
 
 .price-tag.price-call {
   font-size: 0.95rem;
-  color: var(--amber);
+  color: var(--accent-gold);
 }
 
 .btn-order-wa {
@@ -713,7 +697,7 @@ button {
   border: 1px solid var(--border);
   border-radius: var(--radius-lg);
   overflow: hidden;
-  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.4);
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.45);
 }
 
 .sheet-viewer-header {
@@ -731,7 +715,7 @@ button {
   align-items: center;
   gap: 0.5rem;
   font-weight: 600;
-  color: #cbd5e1;
+  color: #d1fae5;
 }
 
 .sheet-header-actions {
@@ -748,7 +732,7 @@ button {
   position: relative;
   width: 100%;
   height: clamp(550px, 75dvh, 850px);
-  background-color: #1e2536;
+  background-color: #0b1410;
 }
 
 .sheet-iframe-wrapper iframe {
@@ -779,8 +763,8 @@ button {
 .spinner-ring {
   width: 36px;
   height: 36px;
-  border: 3px solid rgba(56, 189, 248, 0.15);
-  border-top-color: var(--cyan);
+  border: 3px solid rgba(16, 185, 129, 0.15);
+  border-top-color: var(--mint-neon);
   border-radius: 50%;
   animation: spin-ring 0.8s linear infinite;
 }
@@ -798,7 +782,7 @@ button {
 }
 
 .sheet-footer-notice a {
-  color: var(--cyan);
+  color: var(--mint-neon);
   text-decoration: underline;
 }
 
@@ -826,6 +810,12 @@ button {
   display: flex;
   align-items: flex-start;
   gap: 0.75rem;
+  transition: all 0.2s ease;
+}
+
+.trust-card:hover {
+  border-color: var(--border-hover);
+  background-color: var(--bg-card-hover);
 }
 
 .trust-icon {
@@ -838,9 +828,9 @@ button {
   flex-shrink: 0;
 }
 
-.delivery { background-color: rgba(56, 189, 248, 0.12); color: var(--cyan); }
-.authentic { background-color: rgba(245, 158, 11, 0.12); color: var(--amber); }
-.support { background-color: rgba(37, 211, 102, 0.12); color: var(--wa); }
+.delivery { background-color: rgba(16, 185, 129, 0.14); color: var(--mint-neon); }
+.authentic { background-color: rgba(52, 211, 153, 0.14); color: var(--primary-green); }
+.support { background-color: rgba(37, 211, 102, 0.14); color: #4ade80; }
 
 .trust-card h4 {
   font-size: 0.9rem;
@@ -870,9 +860,9 @@ button {
   left: 0;
   right: 0;
   z-index: 99;
-  background-color: rgba(9, 13, 22, 0.94);
-  backdrop-filter: blur(16px);
-  -webkit-backdrop-filter: blur(16px);
+  background-color: rgba(6, 10, 8, 0.95);
+  backdrop-filter: blur(18px);
+  -webkit-backdrop-filter: blur(18px);
   border-top: 1px solid var(--border);
   padding: 0.5rem 0.75rem;
   padding-bottom: max(0.5rem, env(safe-area-inset-bottom));
@@ -902,8 +892,7 @@ button {
 }
 
 .m-wa { color: #4ade80; }
-.m-call { color: var(--cyan); }
-.m-pdf { color: #f59e0b; }
+.m-pdf { color: var(--mint-neon); }
 .m-fb { color: #60a5fa; }
 
 /* ==========================================================================
@@ -932,54 +921,4 @@ button {
 .footer-note {
   font-size: 0.74rem;
   color: var(--text-muted);
-}
-
-/* ==========================================================================
-   Print / Export PDF Stylesheet
-   ========================================================================== */
-@media print {
-  body {
-    background: #ffffff !important;
-    color: #000000 !important;
-    padding: 0 !important;
-  }
-
-  .announcement-banner,
-  .navbar,
-  .hero-actions,
-  .filter-card,
-  .meta-row,
-  .mobile-bottom-bar,
-  .store-info-grid,
-  .footer,
-  .sheet-viewer-box,
-  .btn-order-wa {
-    display: none !important;
-  }
-
-  .hero-title {
-    color: #000000 !important;
-    font-size: 24pt !important;
-  }
-
-  .hero-sub {
-    color: #333333 !important;
-  }
-
-  .products-container {
-    display: table !important;
-    width: 100% !important;
-  }
-
-  .product-item {
-    display: table-row !important;
-    border-bottom: 1px solid #ddd !important;
-    background: transparent !important;
-    color: #000000 !important;
-    page-break-inside: avoid;
-  }
-
-  .item-title, .price-tag, .item-specs {
-    color: #000000 !important;
-  }
 }
