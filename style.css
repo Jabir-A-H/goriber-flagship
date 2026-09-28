@@ -594,21 +594,19 @@ button {
   font-size: 0.68rem;
   font-weight: 700;
   text-transform: uppercase;
-  letter-spacing: 0.04em;
-  padding: 0.15rem 0.45rem;
+  letter-spacing: 0.05em;
+  padding: 0.15rem 0.5rem;
   border-radius: 4px;
-  background-color: var(--bg-elevated);
-  color: var(--sage-light);
-  border: 1px solid var(--border);
+  background-color: rgba(255, 255, 255, 0.05);
+  color: #9ca3af;
+  border: 1px solid rgba(156, 163, 175, 0.22);
 }
 
-/* Brand specific styling */
-.brand-apple { color: #ffffff; border-color: rgba(255, 255, 255, 0.25); }
-.brand-vivo { color: #60a5fa; border-color: rgba(96, 165, 250, 0.35); }
-.brand-xiaomi { color: var(--amber); border-color: var(--border-amber); }
-.brand-oppo { color: #34d399; border-color: rgba(52, 211, 153, 0.35); }
-.brand-honor { color: #c084fc; border-color: rgba(192, 132, 252, 0.35); }
-.brand-redmi { color: #fb7185; border-color: rgba(251, 113, 133, 0.35); }
+/* Brand specific styling - unified with sleek modern grey tone */
+.brand-apple, .brand-vivo, .brand-xiaomi, .brand-oppo, .brand-honor, .brand-redmi {
+  color: #9ca3af;
+  border-color: rgba(156, 163, 175, 0.22);
+}
 
 .item-title {
   font-size: 1.02rem;
@@ -649,17 +647,17 @@ button {
   text-transform: uppercase;
 }
 
-/* Price in Signature Luminous Amber */
+/* Price in Crisp Pure White */
 .price-tag {
   font-size: 1.25rem;
   font-weight: 800;
-  color: var(--amber);
+  color: #ffffff;
   letter-spacing: -0.01em;
 }
 
 .price-tag.price-call {
   font-size: 0.95rem;
-  color: var(--sage-light);
+  color: #9ca3af;
 }
 
 .btn-order-wa {
@@ -897,7 +895,7 @@ button {
 }
 
 .m-wa { color: #4ade80; }
-.m-pdf { color: var(--amber); }
+.m-call { color: #ffffff; }
 .m-fb { color: #60a5fa; }
 
 /* ==========================================================================
