@@ -6,126 +6,307 @@
 (function () {
   'use strict';
 
-  // Official Phone Model Image Mapping (Local high-res assets)
-  const MODEL_IMAGE_MAP = {
-    // Apple
-    'iphone 11': 'images/phones/iphone-11.jpg',
-    'iphone 12': 'images/phones/iphone-12.jpg',
-    'iphone 12 pro max': 'images/phones/iphone-12-pro-max.jpg',
-    'iphone 13 pro max': 'images/phones/iphone-13-pro-max.jpg',
-    'iphone 14': 'images/phones/iphone-14.jpg',
-    'iphone 14 pro max': 'images/phones/iphone-14-pro-max.jpg',
+  /**
+   * Calculate Levenshtein distance between two strings
+   */
+  function getLevenshteinDistance(a, b) {
+    const al = a.length, bl = b.length;
+    if (!al) return bl;
+    if (!bl) return al;
+    const m = [];
+    for (let i = 0; i <= al; i++) m[i] = [i];
+    for (let j = 0; j <= bl; j++) m[0][j] = j;
+    for (let i = 1; i <= al; i++) {
+      for (let j = 1; j <= bl; j++) {
+        const cost = a[i - 1] === b[j - 1] ? 0 : 1;
+        m[i][j] = Math.min(m[i - 1][j] + 1, m[i][j - 1] + 1, m[i - 1][j - 1] + cost);
+      }
+    }
+    return m[al][bl];
+  }
 
-    // Honor
-    '200': 'images/phones/honor-200.jpg',
-    'magic 5 pro': 'images/phones/magic-5-pro.jpg',
-    'magic 5 ultimate': 'images/phones/magic-5-ultimate.jpg',
-    'magic 6 pro': 'images/phones/magic-6-pro.jpg',
-    'magic 7 pro': 'images/phones/magic-7-pro.jpg',
+  // Known mobile brands for standard capitalization and fuzzy deduplication
+  const KNOWN_BRANDS = [
+    'Apple', 'Samsung', 'Xiaomi', 'Redmi', 'Vivo', 'Oppo',
+    'Honor', 'Google', 'OnePlus', 'Realme', 'Huawei', 'Motorola',
+    'Sony', 'Asus', 'Nokia', 'Nothing', 'Infinix', 'Tecno', 'ZTE', 'iQOO', 'Poco'
+  ];
 
-    // Oppo
-    'find x7': 'images/phones/find-x7.jpg',
-    'find x8': 'images/phones/find-x8.jpg',
-    'find x8 pro': 'images/phones/find-x8-pro.jpg',
-    'find x9': 'images/phones/find-x9.jpg',
-    'find x9 pro': 'images/phones/find-x9-pro.jpg',
+  /**
+   * Helper: Normalize and deduplicate brand name
+   * Fixes typos and casing (e.g. 'apple' -> 'Apple', 'samsng' -> 'Samsung', 'Xiomi' -> 'Xiaomi')
+   */
+  function normalizeBrandName(rawBrand) {
+    if (!rawBrand) return '';
+    const trimmed = rawBrand.trim();
+    const lower = trimmed.toLowerCase();
 
-    // Redmi
-    'note 13 pro+': 'images/phones/note-13-proplus.jpg',
-    'note 13 pro plus': 'images/phones/note-13-proplus.jpg',
-    'k80': 'images/phones/k80.jpg',
-    'k80 pro': 'images/phones/k80-pro.jpg',
-    'k90': 'images/phones/k90.jpg',
-    'k90 pro': 'images/phones/k90-pro.jpg',
+    // 1. Exact case-insensitive match against known brands
+    for (const kb of KNOWN_BRANDS) {
+      if (kb.toLowerCase() === lower) {
+        return kb;
+      }
+    }
 
-    // Vivo
-    'x100': 'images/phones/x100.jpg',
-    'x100 pro': 'images/phones/x100-pro.jpg',
-    'x200': 'images/phones/x200.jpg',
-    'x200 pro mini': 'images/phones/x200-pro-mini.jpg',
-    'x200 pro': 'images/phones/x200-pro.jpg',
-    'x200 ultra': 'images/phones/x200-ultra.jpg',
-    'x300': 'images/phones/x300.jpg',
-    'x300 pro': 'images/phones/x300-pro.jpg',
+    // 2. Fuzzy match to auto-correct typos (distance <= 1 or <= 2 for longer brand names)
+    for (const kb of KNOWN_BRANDS) {
+      const kbLower = kb.toLowerCase();
+      const maxDist = kbLower.length >= 6 ? 2 : 1;
+      if (getLevenshteinDistance(lower, kbLower) <= maxDist) {
+        return kb;
+      }
+    }
 
-    // Xiaomi
-    'civi 4 pro': 'images/phones/civi-4-pro.jpg',
-    'civi 5 pro': 'images/phones/civi-5-pro.jpg',
-    '12s ultra': 'images/phones/12s-ultra.jpg',
-    '13': 'images/phones/13.jpg',
-    '13 pro': 'images/phones/13-pro.jpg',
-    '13 ultra': 'images/phones/13-ultra.jpg',
-    '14': 'images/phones/14.jpg',
-    '14 pro': 'images/phones/14-pro.jpg',
-    '15': 'images/phones/15.jpg',
-    '15 pro': 'images/phones/15-pro.jpg',
-    '15 ultra': 'images/phones/15-ultra.jpg',
-    '17 pro max': 'images/phones/17-pro-max.jpg',
-    '17 ultra': 'images/phones/17-ultra.jpg'
-  };
+    // 3. Fallback: Clean title case first letter
+    return trimmed.charAt(0).toUpperCase() + trimmed.slice(1);
+  }
+
+  /**
+   * Helper: Normalize model casing (e.g., 'a10' -> 'A10', 's24 ultra' -> 'S24 ultra')
+   */
+  function formatModelCasing(str) {
+    if (!str) return '';
+    return str.replace(/^([a-z])([0-9])/i, (match, p1, p2) => p1.toUpperCase() + p2);
+  }
+
+  /**
+   * Helper: Clean model name so brand is not repeated, even with typos or delimiters
+   * E.g. Brand "Samsung", Model "Samsng a10" -> "A10"
+   * E.g. Brand "Samsung", Model "Samsung A10" -> "A10"
+   * E.g. Brand "Xiaomi", Model "Xiaomi 13" -> "13"
+   * E.g. Brand "Apple", Model "iPhone 14" -> "iPhone 14"
+   */
+  function getCleanModelName(brand, model) {
+    const b = (brand || '').trim();
+    let m = (model || '').trim();
+    if (!b || !m) return m || b;
+
+    const bClean = b.toLowerCase().replace(/[^a-z0-9]/g, '');
+
+    // 1. Exact brand or prefix match with delimiters (e.g. 'Samsung A10', 'Samsung-A10', 'Samsung: A10')
+    const exactRegex = new RegExp('^' + b + '[\\s\\-_:]*', 'i');
+    if (exactRegex.test(m)) {
+      const stripped = m.replace(exactRegex, '').trim();
+      if (stripped) return formatModelCasing(stripped);
+    }
+
+    // 2. Fuzzy match on first word to catch typos (e.g. 'Samsng a10', 'Xiomi 13', 'Honour 200')
+    const parts = m.split(/[\s\\-_:]+/);
+    if (parts.length > 1) {
+      const firstWordClean = parts[0].toLowerCase().replace(/[^a-z0-9]/g, '');
+      const maxDist = bClean.length >= 5 ? 2 : 1;
+      if (getLevenshteinDistance(firstWordClean, bClean) <= maxDist) {
+        const rest = m.slice(parts[0].length).replace(/^[\s\\-_:]+/, '').trim();
+        if (rest) return formatModelCasing(rest);
+      }
+    }
+
+    return formatModelCasing(m);
+  }
+
+  /**
+   * Helper: Format clean full device title (e.g. "Xiaomi 13", "Apple iPhone 14", "Samsung A10")
+   */
+  function formatDeviceTitle(brand, model) {
+    const b = (brand || '').trim();
+    const cleanM = getCleanModelName(brand, model);
+    if (!b) return cleanM;
+    if (!cleanM) return b;
+    if (cleanM.toLowerCase().startsWith(b.toLowerCase() + ' ')) {
+      return cleanM;
+    }
+    return `${b} ${cleanM}`;
+  }
+
+  /**
+   * Helper: Format external image URL (e.g. Google Drive share links, direct image links)
+   */
+  function formatImageUrl(url) {
+    if (!url) return '';
+    const cleanUrl = url.trim();
+    if (!cleanUrl) return '';
+
+    // Convert Google Drive share links (e.g. drive.google.com/file/d/XYZ/view or ?id=XYZ) to direct thumbnail links
+    const driveMatch = cleanUrl.match(/\/file\/d\/([a-zA-Z0-9_-]+)/) || cleanUrl.match(/[?&]id=([a-zA-Z0-9_-]+)/);
+    if (driveMatch && driveMatch[1]) {
+      return `https://drive.google.com/thumbnail?id=${driveMatch[1]}&sz=w800`;
+    }
+
+    return cleanUrl;
+  }
+
+  /**
+   * Helper: Unique cache key for auto-fetched phone images
+   */
+  function getAutoImageCacheKey(brand, model) {
+    const b = (brand || '').toLowerCase().trim();
+    const m = (model || '').toLowerCase().trim();
+    return `gf_auto_img_${b}_${m}`;
+  }
+
+  // Universal reliable fallback generic phone illustration (located at repository root)
+  const FALLBACK_PHONE_IMG = 'fallback-phone.svg';
 
   /**
    * Helper: Match phone brand and model to image asset
+   * Supports: 1. Google Sheets custom URL, 2. Cached auto image, 3. Fallback placeholder
    */
-  function getPhoneImage(brand, model) {
-    const norm = (model || '').toLowerCase().trim();
-    if (MODEL_IMAGE_MAP[norm]) return MODEL_IMAGE_MAP[norm];
-    for (const [k, v] of Object.entries(MODEL_IMAGE_MAP)) {
-      if (norm.includes(k) || k.includes(norm)) return v;
+  function getPhoneImage(brand, model, customUrl) {
+    // 1. Direct URL from Google Sheets (Column E/F/etc.)
+    if (customUrl) {
+      const formatted = formatImageUrl(customUrl);
+      if (formatted) return formatted;
     }
-    return 'images/phones/fallback-phone.svg';
+
+    // 2. Check browser cache for auto-fetched image
+    try {
+      const cached = localStorage.getItem(getAutoImageCacheKey(brand, model));
+      if (cached && cached !== 'none' && !cached.includes('.svg')) return cached;
+    } catch (e) {
+      // localStorage unavailable
+    }
+
+    // 3. Universal fallback placeholder
+    return FALLBACK_PHONE_IMG;
   }
 
-  // Fallback / Initial Data (directly from the user's Google Sheet)
-  const INITIAL_PRODUCTS = [
-    { brand: 'Apple', model: 'iPhone 11', ram: '128 GB', price: '20,500 ৳', numPrice: 20500 },
-    { brand: 'Apple', model: 'iPhone 12', ram: '128 GB', price: '23,500 ৳', numPrice: 23500 },
-    { brand: 'Apple', model: 'iPhone 12 Pro Max', ram: '128 GB', price: '33,000 ৳', numPrice: 33000 },
-    { brand: 'Apple', model: 'iPhone 14', ram: '128 GB', price: '47,000 ৳', numPrice: 47000 },
-    { brand: 'Apple', model: 'iPhone 13 Pro Max', ram: '256 GB', price: '58,000 ৳', numPrice: 58000 },
-    { brand: 'Apple', model: 'iPhone 14 Pro Max', ram: '256 GB', price: '69,000 ৳', numPrice: 69000 },
-    { brand: 'Honor', model: '200', ram: '12/256 GB', price: '33,000 ৳', numPrice: 33000 },
-    { brand: 'Honor', model: 'Magic 5 Pro', ram: '12/256 GB', price: '36,000 ৳', numPrice: 36000 },
-    { brand: 'Honor', model: 'Magic 5 Ultimate', ram: '12/256 GB', price: '43,000 ৳', numPrice: 43000 },
-    { brand: 'Honor', model: 'Magic 6 Pro', ram: '12/256 GB', price: '58,000 ৳', numPrice: 58000 },
-    { brand: 'Honor', model: 'Magic 7 Pro', ram: '12/256 GB', price: '65,000 ৳', numPrice: 65000 },
-    { brand: 'Oppo', model: 'Find X7', ram: '12/256 GB', price: '41,000 ৳', numPrice: 41000 },
-    { brand: 'Oppo', model: 'Find X8 Pro', ram: '12/256 GB', price: '59,000 ৳', numPrice: 59000 },
-    { brand: 'Oppo', model: 'Find X9', ram: '12/256 GB', price: '80,000 ৳', numPrice: 80000 },
-    { brand: 'Oppo', model: 'Find X9 Pro', ram: '12/256 GB', price: '81,000 ৳', numPrice: 81000 },
-    { brand: 'Oppo', model: 'Find X8', ram: '12/256 GB', price: 'যোগাযোগ করুন', numPrice: 0 },
-    { brand: 'Redmi', model: 'Note 13 Pro+', ram: '8/256 GB', price: '24,000 ৳', numPrice: 24000 },
-    { brand: 'Redmi', model: 'K80 Pro', ram: '12/256 GB', price: '45,000 ৳', numPrice: 45000 },
-    { brand: 'Redmi', model: 'K90', ram: '12/256 GB', price: '56,000 ৳', numPrice: 56000 },
-    { brand: 'Redmi', model: 'K80', ram: '12/256 GB', price: '91,000 ৳', numPrice: 91000 },
-    { brand: 'Redmi', model: 'K90 Pro', ram: '12/256 GB', price: 'যোগাযোগ করুন', numPrice: 0 },
-    { brand: 'Vivo', model: 'X100', ram: '12/256 GB', price: '36,000 ৳', numPrice: 36000 },
-    { brand: 'Vivo', model: 'X100 Pro', ram: '12/256 GB', price: '44,000 ৳', numPrice: 44000 },
-    { brand: 'Vivo', model: 'X200', ram: '12/256 GB', price: '55,000 ৳', numPrice: 55000 },
-    { brand: 'Vivo', model: 'X200 Pro Mini', ram: '12/256 GB', price: '59,000 ৳', numPrice: 59000 },
-    { brand: 'Vivo', model: 'X200 Pro', ram: '12/256 GB', price: '63,000 ৳', numPrice: 63000 },
-    { brand: 'Vivo', model: 'X300', ram: '12/256 GB', price: '70,000 ৳', numPrice: 70000 },
-    { brand: 'Vivo', model: 'X300 Pro', ram: '12/256 GB', price: '82,000 ৳', numPrice: 82000 },
-    { brand: 'Vivo', model: 'X200 Ultra', ram: '12/256 GB', price: '91,000 ৳', numPrice: 91000 },
-    { brand: 'Xiaomi', model: 'Civi 4 Pro', ram: '12/256 GB', price: '29,000 ৳', numPrice: 29000 },
-    { brand: 'Xiaomi', model: '13', ram: '12/256 GB', price: '32,000 ৳', numPrice: 32000 },
-    { brand: 'Xiaomi', model: '13 Pro', ram: '12/256 GB', price: '35,000 ৳', numPrice: 35000 },
-    { brand: 'Xiaomi', model: '14', ram: '12/256 GB', price: '38,000 ৳', numPrice: 38000 },
-    { brand: 'Xiaomi', model: 'Civi 5 Pro', ram: '12/256 GB', price: '39,000 ৳', numPrice: 39000 },
-    { brand: 'Xiaomi', model: '14 Pro', ram: '12/256 GB', price: '44,000 ৳', numPrice: 44000 },
-    { brand: 'Xiaomi', model: '15', ram: '12/256 GB', price: '46,000 ৳', numPrice: 46000 },
-    { brand: 'Xiaomi', model: '15 Pro', ram: '12/256 GB', price: '65,000 ৳', numPrice: 65000 },
-    { brand: 'Xiaomi', model: '15 Ultra', ram: '12/256 GB', price: '67,000 ৳', numPrice: 67000 },
-    { brand: 'Xiaomi', model: '17 Pro Max', ram: '16/512 GB', price: '97,500 ৳', numPrice: 97500 },
-    { brand: 'Xiaomi', model: '17 Ultra', ram: '16/512 GB', price: '112,000 ৳', numPrice: 112000 },
-    { brand: 'Xiaomi', model: '12S Ultra', ram: '12/256 GB', price: 'যোগাযোগ করুন', numPrice: 0 },
-    { brand: 'Xiaomi', model: '13 Ultra', ram: '12/256 GB', price: '40,000 ৳', numPrice: 40000 }
-  ].map(p => ({ ...p, image: getPhoneImage(p.brand, p.model) }));
+  /**
+   * Helper: Fetch online image for an element and dynamically update it
+   */
+  function fetchAutoImageForElement(img, brand, model) {
+    if (!brand || !model || !img) return;
+    const cacheKey = getAutoImageCacheKey(brand, model);
+    let cached = null;
+    try {
+      cached = localStorage.getItem(cacheKey);
+    } catch (e) {}
 
-  // Application State
+    if (cached) {
+      if (cached !== 'none' && !cached.includes('.svg') && img.src !== cached) {
+        img.src = cached;
+        img.removeAttribute('data-auto-search');
+        const matchProd = state.products.find(p => p.brand === brand && p.model === model);
+        if (matchProd) matchProd.image = cached;
+      }
+      return;
+    }
+
+    // Query online mobile database / Wikimedia Commons API using clean device title
+    const searchTitle = formatDeviceTitle(brand, model);
+    const apiUrl = `https://en.wikipedia.org/w/api.php?action=query&format=json&origin=*&generator=search&gsrsearch=${encodeURIComponent(searchTitle)}&gsrlimit=3&prop=pageimages&pithumbsize=600`;
+
+    fetch(apiUrl)
+      .then(res => res.json())
+      .then(data => {
+        const pages = data?.query?.pages;
+        if (pages) {
+          const pageList = Object.values(pages).sort((a, b) => (a.index || 99) - (b.index || 99));
+          const foundPage = pageList.find(p => p?.thumbnail?.source);
+          if (foundPage && foundPage.thumbnail && foundPage.thumbnail.source) {
+            const photoUrl = foundPage.thumbnail.source;
+            try {
+              localStorage.setItem(cacheKey, photoUrl);
+            } catch (e) {}
+            img.src = photoUrl;
+            img.removeAttribute('data-auto-search');
+            const matchProd = state.products.find(p => p.brand === brand && p.model === model);
+            if (matchProd) matchProd.image = photoUrl;
+            return;
+          }
+        }
+        try {
+          localStorage.setItem(cacheKey, 'none');
+        } catch (e) {}
+      })
+      .catch(() => {
+        // Silently retain fallback SVG on network error
+      });
+  }
+
+  /**
+   * Global handler for any product image load errors
+   * Triggered when a local file is deleted from repo, a URL breaks, or an image fails to load.
+   */
+  window.handleProductImageError = function (img) {
+    if (!img) return;
+    const brand = img.getAttribute('data-brand') || '';
+    const model = img.getAttribute('data-model') || '';
+
+    // If online search was already attempted or if fallback is already showing, stop to prevent loops
+    if (img.dataset.apiAttempted === 'true') {
+      img.onerror = null;
+      img.src = FALLBACK_PHONE_IMG;
+      return;
+    }
+
+    // Mark that we are trying fallback + online search
+    img.dataset.apiAttempted = 'true';
+    img.src = FALLBACK_PHONE_IMG;
+
+    // Immediately trigger background search
+    if (brand && model) {
+      fetchAutoImageForElement(img, brand, model);
+    }
+  };
+
+  /**
+   * Helper: Automatically fetch phone images from Wikipedia/Wikimedia for unmapped models
+   */
+  function resolveAutoImages() {
+    const unmappedImages = document.querySelectorAll('img[data-auto-search="true"]');
+    if (!unmappedImages.length) return;
+
+    unmappedImages.forEach(img => {
+      const brand = img.getAttribute('data-brand') || '';
+      const model = img.getAttribute('data-model') || '';
+      fetchAutoImageForElement(img, brand, model);
+    });
+  }
+
+  /**
+   * Helper: Get active Google Sheet ID from URL parameter or configuration
+   */
+  function getActiveSheetId() {
+    const urlParams = new URLSearchParams(window.location.search);
+    return urlParams.get('sheet') || APP_CONFIG.googleSheetId;
+  }
+
+  /**
+   * Helper: Retrieve cached products from localStorage for current sheet
+   */
+  function getCachedProducts() {
+    try {
+      const sheetId = getActiveSheetId();
+      const cached = localStorage.getItem(`gf_live_products_v2_${sheetId}`);
+      if (cached) {
+        const parsed = JSON.parse(cached);
+        if (Array.isArray(parsed) && parsed.length > 0) {
+          return parsed;
+        }
+      }
+    } catch (e) {
+      // localStorage unavailable or parse failed
+    }
+    return [];
+  }
+
+  /**
+   * Helper: Save fresh live products to localStorage for instant load next time
+   */
+  function saveCachedProducts(products) {
+    try {
+      const sheetId = getActiveSheetId();
+      localStorage.setItem(`gf_live_products_v2_${sheetId}`, JSON.stringify(products));
+    } catch (e) {
+      // localStorage quota or unavailable
+    }
+  }
+
+  // Application State: initialized from cached live data if available, else empty array
+  const initialProducts = getCachedProducts();
   const state = {
-    products: [...INITIAL_PRODUCTS],
-    filtered: [...INITIAL_PRODUCTS],
+    products: initialProducts,
+    filtered: initialProducts,
     selectedBrand: 'all',
     searchQuery: '',
     sortOrder: 'default',
@@ -157,10 +338,11 @@
     filteredCountText: document.getElementById('filteredCountText'),
     productsContainer: document.getElementById('productsContainer'),
 
-    // Sheet / PDF Actions
+    // Live Sheet Actions
     sheetIframe: document.getElementById('sheetIframe'),
     sheetSpinner: document.getElementById('sheetSpinner'),
-    btnReloadSheet: document.getElementById('btnReloadSheet')
+    btnReloadSheet: document.getElementById('btnReloadSheet'),
+    btnOpenSheetTab: document.getElementById('btnOpenSheetTab')
   };
 
   /**
@@ -179,7 +361,17 @@
     if (dom.navWaBtn) dom.navWaBtn.href = waUrl;
     if (dom.mobileWaBtn) dom.mobileWaBtn.href = waUrl;
 
-    // Render Initial Products immediately
+    const activeSheetId = getActiveSheetId();
+
+    // Point Sheet Iframe & Direct Link to active sheet
+    if (dom.sheetIframe && activeSheetId) {
+      dom.sheetIframe.src = `https://docs.google.com/spreadsheets/d/${activeSheetId}/preview`;
+    }
+    if (dom.btnOpenSheetTab && activeSheetId) {
+      dom.btnOpenSheetTab.href = `https://docs.google.com/spreadsheets/d/${activeSheetId}/edit`;
+    }
+
+    // Render Initial State (from cached sheet data if available, or loading skeleton)
     renderBrandPills();
     applyFilterAndSort();
 
@@ -195,16 +387,69 @@
    */
   function getWhatsAppUrl(phone) {
     const cleanWa = APP_CONFIG.whatsapp.replace(/[^0-9]/g, '');
-    const msg = `আসসালামু আলাইকুম Goriber Flagship!\nআমি ওয়েবসাইট থেকে লাইভ প্রাইস লিস্ট দেখেছি।\n\n📱 মডেল: ${phone.brand} ${phone.model}\n💾 ভ্যারিয়েন্ট: ${phone.ram}\n💰 মূল্য: ${phone.price}\n\nফোনটি কি বর্তমানে স্টকে আছে এবং ডেলিভারি বিস্তারিত জানাবেন প্লিজ।`;
+    const fullTitle = formatDeviceTitle(phone.brand, phone.model);
+    const msg = `আসসালামু আলাইকুম Goriber Flagship!\nআমি ওয়েবসাইট থেকে লাইভ প্রাইস লিস্ট দেখেছি।\n\n📱 ফোন: ${fullTitle}\n💾 ভ্যারিয়েন্ট: ${phone.ram || 'অফিশিয়াল'}\n💰 মূল্য: ${phone.price}\n\nফোনটি কি বর্তমানে স্টকে আছে এবং ডেলিভারি বিস্তারিত জানাবেন প্লিজ।`;
     return `https://wa.me/${cleanWa}?text=${encodeURIComponent(msg)}`;
   }
 
   /**
-   * Fetch Live CSV from Google Sheet
+   * Fetch Live Data from Google Sheet
+   * Uses universal JSONP by default (immune to file:/// and local CORS blocks) with fetch fallback.
    */
   function fetchGoogleSheetData() {
-    const csvUrl = `https://docs.google.com/spreadsheets/d/${APP_CONFIG.googleSheetId}/gviz/tq?tqx=out:csv`;
+    const activeSheetId = getActiveSheetId();
 
+    if (dom.sheetIframe && !dom.sheetIframe.src.includes(activeSheetId)) {
+      dom.sheetIframe.src = `https://docs.google.com/spreadsheets/d/${activeSheetId}/preview`;
+    }
+    if (dom.btnOpenSheetTab) {
+      dom.btnOpenSheetTab.href = `https://docs.google.com/spreadsheets/d/${activeSheetId}/edit`;
+    }
+
+    let isCompleted = false;
+
+    // 1. Universal JSONP loader: Works on file:///, localhost, and live web
+    const callbackName = '__gvizCallback_' + Math.floor(Math.random() * 1000000);
+    window[callbackName] = function (data) {
+      if (isCompleted) return;
+      isCompleted = true;
+      try {
+        delete window[callbackName];
+      } catch (e) {
+        window[callbackName] = undefined;
+      }
+      if (script && script.parentNode) script.parentNode.removeChild(script);
+
+      const items = parseGvizTable(data);
+      if (items.length > 0) {
+        state.products = items;
+        saveCachedProducts(items);
+        if (dom.lastUpdatedDate) {
+          dom.lastUpdatedDate.textContent = 'লাইভ সিঙ্ক সম্পন্ন';
+        }
+        renderBrandPills();
+        applyFilterAndSort();
+      }
+    };
+
+    const script = document.createElement('script');
+    script.src = `https://docs.google.com/spreadsheets/d/${activeSheetId}/gviz/tq?tqx=responseHandler:${callbackName}`;
+    script.onerror = function () {
+      if (!isCompleted) fallbackFetchCsv(activeSheetId);
+    };
+    document.head.appendChild(script);
+
+    // Timeout fallback to standard fetch (in case script tag blocked)
+    setTimeout(() => {
+      if (!isCompleted) fallbackFetchCsv(activeSheetId);
+    }, 2800);
+  }
+
+  /**
+   * Fallback CSV Fetch (used if script tag fails)
+   */
+  function fallbackFetchCsv(activeSheetId) {
+    const csvUrl = `https://docs.google.com/spreadsheets/d/${activeSheetId}/gviz/tq?tqx=out:csv`;
     fetch(csvUrl)
       .then(res => {
         if (!res.ok) throw new Error('Network response error');
@@ -214,6 +459,7 @@
         const parsed = parseCsv(csv);
         if (parsed.items.length > 0) {
           state.products = parsed.items;
+          saveCachedProducts(parsed.items);
           if (parsed.updatedDate && dom.lastUpdatedDate) {
             dom.lastUpdatedDate.textContent = parsed.updatedDate;
           }
@@ -222,8 +468,87 @@
         }
       })
       .catch(err => {
-        console.warn('Using cached offline data from Google Sheet:', err);
+        console.warn('Google Sheet sync error:', err);
+        if (state.products.length === 0) {
+          if (dom.filteredCountText) dom.filteredCountText.textContent = 'সংযোগ পাওয়া যায়নি';
+          dom.productsContainer.innerHTML = `
+            <div class="empty-box" style="grid-column: 1 / -1; padding: 3rem 1rem;">
+              <p style="color: #ff6b6b; font-weight: 600;">গুগল শিট থেকে ডাটা লোড করা সম্ভব হয়নি।</p>
+              <button class="btn btn-ghost" style="margin-top: 1rem;" onclick="location.reload()">পুনরায় চেষ্টা করুন</button>
+            </div>
+          `;
+        }
       });
+  }
+
+  /**
+   * Parse JSON Table from Google Sheets GViz API
+   */
+  function parseGvizTable(data) {
+    if (!data || !data.table || !Array.isArray(data.table.rows)) return [];
+    const items = [];
+
+    data.table.rows.forEach(row => {
+      if (!row || !Array.isArray(row.c)) return;
+
+      const getVal = idx => {
+        const cell = row.c[idx];
+        if (!cell || cell.v === null || cell.v === undefined) return '';
+        return String(cell.v).trim();
+      };
+      const getFormatted = idx => {
+        const cell = row.c[idx];
+        if (!cell) return '';
+        if (cell.f) return String(cell.f).trim();
+        if (cell.v !== null && cell.v !== undefined) return String(cell.v).trim();
+        return '';
+      };
+
+      const rawBrand = getVal(0);
+      const rawModel = getVal(1);
+      const ram = getVal(2);
+      const rawPrice = getFormatted(3) || getVal(3);
+
+      if (!rawBrand || !rawModel) return;
+      const bLower = rawBrand.toLowerCase();
+      if (bLower.includes('for latest') || bLower.includes('contact') || bLower.includes('updated:') || bLower.includes('current phone price')) {
+        return;
+      }
+
+      const brand = normalizeBrandName(rawBrand);
+      const model = rawModel.trim();
+
+      let numPrice = parseInt(rawPrice.replace(/[^0-9]/g, ''), 10) || 0;
+      let displayPrice = rawPrice.trim();
+      if (!displayPrice || numPrice === 0) {
+        displayPrice = 'যোগাযোগ করুন';
+      } else if (!displayPrice.includes('৳')) {
+        displayPrice = numPrice.toLocaleString('en-IN') + ' ৳';
+      }
+
+      // Look for custom image URL in columns 4+
+      let sheetImageUrl = '';
+      for (let c = 4; c < row.c.length; c++) {
+        const cellVal = getVal(c);
+        if (cellVal && !cellVal.toLowerCase().includes('view specifications') && !cellVal.toLowerCase().includes('no exact')) {
+          if (cellVal.startsWith('http://') || cellVal.startsWith('https://') || cellVal.startsWith('images/') || cellVal.startsWith('//')) {
+            sheetImageUrl = cellVal;
+            break;
+          }
+        }
+      }
+
+      items.push({
+        brand,
+        model,
+        ram,
+        price: displayPrice,
+        numPrice,
+        image: getPhoneImage(brand, model, sheetImageUrl)
+      });
+    });
+
+    return items;
   }
 
   /**
@@ -245,15 +570,18 @@
     for (let i = 1; i < lines.length; i++) {
       const cols = lines[i].split(/,(?=(?:(?:[^"]*"){2})*[^"]*$)/).map(c => c.replace(/^"|"$/g, '').trim());
       if (cols.length >= 3 && cols[0] && cols[1]) {
-        const brand = cols[0];
-        const model = cols[1];
+        const rawBrand = cols[0];
+        const rawModel = cols[1];
         const ram = cols[2] || '';
         let rawPrice = cols[3] || '';
 
         // Ignore notice footer
-        if (brand.toLowerCase().includes('for latest') || brand.toLowerCase().includes('contact')) {
+        if (rawBrand.toLowerCase().includes('for latest') || rawBrand.toLowerCase().includes('contact')) {
           continue;
         }
+
+        const brand = normalizeBrandName(rawBrand);
+        const model = rawModel.trim();
 
         let numPrice = parseInt(rawPrice.replace(/[^0-9]/g, ''), 10) || 0;
         let displayPrice = rawPrice.trim();
@@ -263,13 +591,25 @@
           displayPrice = numPrice.toLocaleString('en-IN') + ' ৳';
         }
 
+        // Look for image URL in extra columns (Column E, F, etc.)
+        let sheetImageUrl = '';
+        for (let c = 4; c < cols.length; c++) {
+          const cell = (cols[c] || '').trim();
+          if (cell && !cell.toLowerCase().includes('view specifications') && !cell.toLowerCase().includes('no exact')) {
+            if (cell.startsWith('http://') || cell.startsWith('https://') || cell.startsWith('images/') || cell.startsWith('//')) {
+              sheetImageUrl = cell;
+              break;
+            }
+          }
+        }
+
         items.push({
           brand,
           model,
           ram,
           price: displayPrice,
           numPrice,
-          image: getPhoneImage(brand, model)
+          image: getPhoneImage(brand, model, sheetImageUrl)
         });
       }
     }
@@ -285,17 +625,24 @@
     const brandCounts = {};
     state.products.forEach(p => {
       const b = p.brand;
-      brandCounts[b] = (brandCounts[b] || 0) + 1;
+      if (b) {
+        brandCounts[b] = (brandCounts[b] || 0) + 1;
+      }
     });
 
     if (dom.totalCountBadge) {
-      dom.totalCountBadge.textContent = state.products.length;
+      dom.totalCountBadge.textContent = state.products.length ? state.products.length : '...';
+    }
+
+    if (state.products.length === 0) {
+      dom.brandPillsContainer.innerHTML = `<button class="brand-pill active" data-brand="all">সকল ফোন (...) </button>`;
+      return;
     }
 
     let pillsHtml = `<button class="brand-pill ${state.selectedBrand === 'all' ? 'active' : ''}" data-brand="all">সকল ফোন (${state.products.length})</button>`;
     
     // Sort brands alphabetically
-    const brands = Object.keys(brandCounts).sort();
+    const brands = Object.keys(brandCounts).sort((a, b) => a.localeCompare(b));
     brands.forEach(b => {
       const count = brandCounts[b];
       const isActive = state.selectedBrand.toLowerCase() === b.toLowerCase();
@@ -322,6 +669,7 @@
       list = list.filter(p => 
         p.model.toLowerCase().includes(q) ||
         p.brand.toLowerCase().includes(q) ||
+        (p.brand + ' ' + p.model).toLowerCase().includes(q) ||
         p.ram.toLowerCase().includes(q)
       );
     }
@@ -341,6 +689,20 @@
    * Render Product Cards
    */
   function renderProducts() {
+    if (state.products.length === 0) {
+      if (dom.filteredCountText) {
+        dom.filteredCountText.textContent = 'লাইভ তালিকা লোড হচ্ছে...';
+      }
+      dom.productsContainer.innerHTML = `
+        <div class="empty-box" style="grid-column: 1 / -1; padding: 3.5rem 1rem;">
+          <div class="spinner-ring" style="margin: 0 auto 1.25rem;"></div>
+          <p style="font-weight: 600; color: var(--sage-light); font-size: 1.05rem;">লাইভ গুগল শিট থেকে স্মার্টফোনের ডাটা লোড হচ্ছে...</p>
+          <span style="font-size: 0.85rem; color: var(--sage); margin-top: 0.35rem; display: block;">অনুগ্রহ করে কিছুক্ষণ অপেক্ষা করুন</span>
+        </div>
+      `;
+      return;
+    }
+
     dom.filteredCountText.textContent = `মোট ${state.filtered.length}টি স্মার্টফোন পাওয়া গেছে`;
 
     if (state.filtered.length === 0) {
@@ -366,23 +728,35 @@
 
     let html = '';
     state.filtered.forEach(p => {
-      const brandClass = `brand-${p.brand.toLowerCase()}`;
       const isCall = p.numPrice === 0;
       const waLink = getWhatsAppUrl(p);
       const imgUrl = p.image || getPhoneImage(p.brand, p.model);
+      const isFallback = imgUrl === FALLBACK_PHONE_IMG || imgUrl.includes('fallback-phone.svg');
+      const fullTitle = formatDeviceTitle(p.brand, p.model);
+      const cleanModel = getCleanModelName(p.brand, p.model);
+      const brandClass = 'brand-' + (p.brand || '').toLowerCase().replace(/[^a-z0-9]/g, '');
 
       html += `
         <article class="product-item">
           <div class="item-visual">
-            <span class="brand-label ${brandClass}">${escapeHtml(p.brand)}</span>
             <div class="item-img-container">
-              <img src="${imgUrl}" alt="${escapeHtml(p.brand)} ${escapeHtml(p.model)}" class="item-img" loading="lazy" onerror="this.onerror=null; this.src='images/phones/fallback-phone.svg';" />
+              <img src="${imgUrl}" 
+                   alt="${escapeHtml(fullTitle)}" 
+                   class="item-img" 
+                   loading="lazy" 
+                   data-brand="${escapeHtml(p.brand)}" 
+                   data-model="${escapeHtml(p.model)}" 
+                   ${isFallback ? 'data-auto-search="true"' : ''}
+                   onerror="window.handleProductImageError(this)" />
             </div>
           </div>
 
           <div class="item-body">
-            <h3 class="item-title">${escapeHtml(p.model)}</h3>
-            <span class="item-specs">${escapeHtml(p.ram)}</span>
+            <h3 class="item-title">
+              <span class="brand-label ${brandClass}">${escapeHtml(p.brand)}</span>
+              <span class="model-name">${escapeHtml(cleanModel)}</span>
+            </h3>
+            <span class="item-specs">${escapeHtml(p.ram || 'অফিশিয়াল ভ্যারিয়েন্ট')}</span>
           </div>
 
           <div class="item-footer">
@@ -400,6 +774,9 @@
     });
 
     dom.productsContainer.innerHTML = html;
+
+    // Automatically resolve missing device images
+    resolveAutoImages();
   }
 
   /**

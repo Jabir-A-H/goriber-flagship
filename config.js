@@ -13,14 +13,11 @@ const APP_CONFIG = {
   whatsappDisplay: "01410-405664",
   facebookUrl: "https://www.facebook.com/GoriberFlagship/",
 
-  // Live Google Sheet Source
+  // Live Google Sheet Source (Official Production Sheet)
   googleSheetUrl: "https://docs.google.com/spreadsheets/d/17qY32Y8GDPWVZ9YfjyIRvItH0nFhsr6CJDxYBqkvuVg/edit",
   googleSheetId: "17qY32Y8GDPWVZ9YfjyIRvItH0nFhsr6CJDxYBqkvuVg",
 
-  // Downloadable PDF
-  pdfFileUrl: "goriber-flagship-prices.pdf",
-
-  // Default View: 'list' (Product Cards) or 'sheet' (Sheet / PDF View)
+  // Default View: 'list' (Product Cards) or 'sheet' (Live Sheet View)
   defaultView: "list",
 
   // Customer Announcement

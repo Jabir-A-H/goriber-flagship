@@ -374,26 +374,6 @@ button {
   box-shadow: var(--glow-emerald);
 }
 
-.doc-actions {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.45rem;
-}
-
-/* Download Button in Signature Amber */
-.btn-download {
-  background: linear-gradient(135deg, var(--amber) 0%, var(--amber-hover) 100%);
-  color: #231f20;
-  font-weight: 700;
-  box-shadow: 0 3px 12px rgba(251, 139, 1, 0.35);
-}
-
-.btn-download:hover {
-  background: linear-gradient(135deg, #ffa02e 0%, var(--amber) 100%);
-  transform: translateY(-1px);
-  box-shadow: 0 5px 18px rgba(251, 139, 1, 0.5);
-}
-
 /* ==========================================================================
    Filter & Search Card
    ========================================================================== */
@@ -618,36 +598,31 @@ button {
   max-height: 100%;
   object-fit: contain;
   filter: drop-shadow(0 8px 18px rgba(0, 0, 0, 0.55));
-  transition: transform 0.28s cubic-bezier(0.16, 1, 0.3, 1);
+  transition: transform 0.28s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.3s ease;
 }
 
 .product-item:hover .item-img {
   transform: scale(1.07) translateY(-2px);
 }
 
-.item-visual .brand-label {
-  position: absolute;
-  top: 0.55rem;
-  left: 0.55rem;
-  z-index: 2;
-  backdrop-filter: blur(8px);
-  -webkit-backdrop-filter: blur(8px);
-}
-
 .brand-label {
+  display: inline-flex;
+  align-items: center;
   font-size: 0.68rem;
   font-weight: 700;
   text-transform: uppercase;
-  letter-spacing: 0.05em;
-  padding: 0.15rem 0.5rem;
+  letter-spacing: 0.04em;
+  padding: 0.14rem 0.45rem;
   border-radius: 4px;
   background-color: rgba(24, 21, 22, 0.85);
   color: #9ca3af;
   border: 1px solid rgba(156, 163, 175, 0.28);
+  flex-shrink: 0;
+  line-height: 1.2;
 }
 
 /* Brand specific styling - unified with sleek modern grey tone */
-.brand-apple, .brand-vivo, .brand-xiaomi, .brand-oppo, .brand-honor, .brand-redmi {
+.brand-apple, .brand-vivo, .brand-xiaomi, .brand-oppo, .brand-honor, .brand-redmi, .brand-google, .brand-samsung, .brand-nokia {
   color: #9ca3af;
   border-color: rgba(156, 163, 175, 0.28);
 }
@@ -655,14 +630,23 @@ button {
 .item-body {
   display: flex;
   flex-direction: column;
-  gap: 0.25rem;
+  gap: 0.35rem;
 }
 
 .item-title {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 0.45rem;
   font-size: 1.02rem;
   font-weight: 700;
   color: #ffffff;
-  line-height: 1.3;
+  line-height: 1.35;
+}
+
+.model-name {
+  color: #ffffff;
+  font-weight: 700;
 }
 
 .item-specs {
@@ -742,7 +726,7 @@ button {
 }
 
 /* ==========================================================================
-   VIEW 2: Sheet / PDF Container
+   VIEW 2: Live Google Sheet Container
    ========================================================================== */
 .sheet-viewer-box {
   background-color: var(--bg-surface);

@@ -114,31 +114,25 @@
           </div>
         </div>
 
-        <!-- Dynamic Brand Pills -->
+        <!-- Dynamic Brand Pills (Populated from Live Google Sheet) -->
         <div class="brands-scroll" id="brandPillsContainer" role="group" aria-label="ব্র্যান্ড ফিল্টার">
-          <button class="brand-pill active" data-brand="all">সকল ফোন (<span id="totalCountBadge">42</span>)</button>
-          <button class="brand-pill" data-brand="apple">Apple</button>
-          <button class="brand-pill" data-brand="vivo">Vivo</button>
-          <button class="brand-pill" data-brand="xiaomi">Xiaomi</button>
-          <button class="brand-pill" data-brand="oppo">Oppo</button>
-          <button class="brand-pill" data-brand="honor">Honor</button>
-          <button class="brand-pill" data-brand="redmi">Redmi</button>
+          <button class="brand-pill active" data-brand="all">সকল ফোন (<span id="totalCountBadge">...</span>)</button>
         </div>
       </div>
 
       <!-- Results Count & Tip -->
       <div class="meta-row">
-        <span id="filteredCountText">মোট ৪২টি স্মার্টফোন পাওয়া গেছে</span>
+        <span id="filteredCountText">লাইভ তালিকা লোড হচ্ছে...</span>
         <span class="meta-hint">💬 যেকোনো ফোনের পাশে হোয়াটসঅ্যাপে চাপ দিয়ে সাথে সাথে স্টক ও অর্ডার কনফার্ম করুন</span>
       </div>
 
       <!-- Product Cards Grid -->
       <div class="products-container" id="productsContainer">
-        <!-- Rendered by JavaScript -->
+        <!-- Rendered dynamically from live Google Sheet -->
       </div>
     </section>
 
-    <!-- VIEW 2: EMBEDDED GOOGLE SHEET / PDF VIEWER -->
+    <!-- VIEW 2: EMBEDDED GOOGLE SHEET VIEWER -->
     <section id="sectionSheet" class="content-view hidden">
       <div class="sheet-viewer-box">
         <div class="sheet-viewer-header">
