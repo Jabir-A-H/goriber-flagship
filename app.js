@@ -136,6 +136,25 @@
   }
 
   /**
+   * Helper: Determine if a string is a valid image URL rather than a webpage (e.g. .php, .html)
+   */
+  function isLikelyImageUrl(url) {
+    if (!url) return false;
+    const u = url.trim().toLowerCase();
+    if (u.includes('view specifications') || u.includes('no exact')) return false;
+    if (!u.startsWith('http://') && !u.startsWith('https://') && !u.startsWith('//') && !u.startsWith('images/')) return false;
+
+    // Exclude webpage links (e.g. GSMarena specs page ending with .php or .html)
+    if (u.endsWith('.php') || u.endsWith('.html') || u.endsWith('.htm')) return false;
+
+    // Positive image check: standard image extensions or known image paths/CDNs
+    const hasImageExt = /\.(jpg|jpeg|png|webp|svg|gif|avif)(\?.*)?$/i.test(u);
+    const isImageCdn = u.includes('/bigpic/') || u.includes('/thumbnail?') || u.includes('drive.google.com') || u.includes('images/');
+
+    return hasImageExt || isImageCdn;
+  }
+
+  /**
    * Helper: Unique cache key for auto-fetched phone images
    */
   function getAutoImageCacheKey(brand, model) {
@@ -526,15 +545,16 @@
         displayPrice = numPrice.toLocaleString('en-IN') + ' ৳';
       }
 
-      // Look for custom image URL in columns 4+
+      // Look for custom image URL and specification link in columns 4+
       let sheetImageUrl = '';
+      let specsUrl = '';
       for (let c = 4; c < row.c.length; c++) {
         const cellVal = getVal(c);
-        if (cellVal && !cellVal.toLowerCase().includes('view specifications') && !cellVal.toLowerCase().includes('no exact')) {
-          if (cellVal.startsWith('http://') || cellVal.startsWith('https://') || cellVal.startsWith('images/') || cellVal.startsWith('//')) {
-            sheetImageUrl = cellVal;
-            break;
-          }
+        if (!cellVal) continue;
+        if (!sheetImageUrl && isLikelyImageUrl(cellVal)) {
+          sheetImageUrl = cellVal;
+        } else if (!specsUrl && (cellVal.startsWith('http://') || cellVal.startsWith('https://')) && !isLikelyImageUrl(cellVal)) {
+          specsUrl = cellVal;
         }
       }
 
@@ -544,7 +564,8 @@
         ram,
         price: displayPrice,
         numPrice,
-        image: getPhoneImage(brand, model, sheetImageUrl)
+        image: getPhoneImage(brand, model, sheetImageUrl),
+        specsUrl
       });
     });
 
@@ -591,15 +612,16 @@
           displayPrice = numPrice.toLocaleString('en-IN') + ' ৳';
         }
 
-        // Look for image URL in extra columns (Column E, F, etc.)
+        // Look for custom image URL and specification link in extra columns (Column E, F, etc.)
         let sheetImageUrl = '';
+        let specsUrl = '';
         for (let c = 4; c < cols.length; c++) {
           const cell = (cols[c] || '').trim();
-          if (cell && !cell.toLowerCase().includes('view specifications') && !cell.toLowerCase().includes('no exact')) {
-            if (cell.startsWith('http://') || cell.startsWith('https://') || cell.startsWith('images/') || cell.startsWith('//')) {
-              sheetImageUrl = cell;
-              break;
-            }
+          if (!cell) continue;
+          if (!sheetImageUrl && isLikelyImageUrl(cell)) {
+            sheetImageUrl = cell;
+          } else if (!specsUrl && (cell.startsWith('http://') || cell.startsWith('https://')) && !isLikelyImageUrl(cell)) {
+            specsUrl = cell;
           }
         }
 
@@ -609,7 +631,8 @@
           ram,
           price: displayPrice,
           numPrice,
-          image: getPhoneImage(brand, model, sheetImageUrl)
+          image: getPhoneImage(brand, model, sheetImageUrl),
+          specsUrl
         });
       }
     }
