@@ -13,9 +13,9 @@ const APP_CONFIG = {
   whatsappDisplay: "01410-405664",
   facebookUrl: "https://www.facebook.com/GoriberFlagship/",
 
-  // Live Google Sheet Source (Temporary Test Sheet)
-  googleSheetUrl: "https://docs.google.com/spreadsheets/d/1j-EVdCZJJVmO193inW2gWHT8XC_XCuTCWYyXKeow_7U/edit",
-  googleSheetId: "1j-EVdCZJJVmO193inW2gWHT8XC_XCuTCWYyXKeow_7U",
+  // Live Google Sheet Source (Official Production Sheet)
+  googleSheetUrl: "https://docs.google.com/spreadsheets/d/17qY32Y8GDPWVZ9YfjyIRvItH0nFhsr6CJDxYBqkvuVg/edit",
+  googleSheetId: "17qY32Y8GDPWVZ9YfjyIRvItH0nFhsr6CJDxYBqkvuVg",
 
   // Default View: 'list' (Product Cards) or 'sheet' (Live Sheet View)
   defaultView: "list",
