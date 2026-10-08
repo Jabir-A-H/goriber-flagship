@@ -224,40 +224,26 @@
       try { localStorage.setItem(cacheKey, 'none'); } catch (e) {}
     };
 
-    // Original Wikipedia API Fallback
-    const fetchWikipedia = () => {
-      const wikiUrl = `https://en.wikipedia.org/w/api.php?action=query&format=json&origin=*&generator=search&gsrsearch=${encodeURIComponent(searchTitle)}&gsrlimit=3&prop=pageimages&pithumbsize=600`;
-      fetch(wikiUrl)
-        .then(res => res.json())
-        .then(data => {
-          const pages = data?.query?.pages;
-          if (pages) {
-            const pageList = Object.values(pages).sort((a, b) => (a.index || 99) - (b.index || 99));
-            const foundPage = pageList.find(p => p?.thumbnail?.source);
-            if (foundPage && foundPage.thumbnail && foundPage.thumbnail.source) {
-              setPhoto(foundPage.thumbnail.source);
-              return;
-            }
-          }
-          markNotFound();
-        })
-        .catch(() => markNotFound()); // Silently retain fallback SVG on network error
-    };
+    // The Expert Solution: Wikimedia Commons API (Native CORS, No Cloudflare)
+    const commonsUrl = `https://commons.wikimedia.org/w/api.php?action=query&format=json&origin=*&generator=search&gsrsearch=${encodeURIComponent(searchTitle)}&gsrlimit=3&prop=imageinfo&iiprop=url`;
 
-    // New Option: Hostinger PHP Backend Proxy Scraper (GSMArena)
-    const proxyUrl = `fetch-image.php?q=${encodeURIComponent(searchTitle)}`;
-
-    fetch(proxyUrl)
+    fetch(commonsUrl)
       .then(res => res.json())
       .then(data => {
-        if (data.url) {
-          setPhoto(data.url);
-        } else {
-          fetchWikipedia(); // Fallback to Wikipedia if no image found in GSMArena
+        const pages = data?.query?.pages;
+        if (pages) {
+          // Sort pages to get the first search result
+          const pageList = Object.values(pages).sort((a, b) => (a.index || 99) - (b.index || 99));
+          const foundPage = pageList.find(p => p?.imageinfo?.[0]?.url);
+          if (foundPage && foundPage.imageinfo[0].url) {
+            setPhoto(foundPage.imageinfo[0].url);
+            return;
+          }
         }
+        markNotFound();
       })
       .catch(() => {
-        fetchWikipedia(); // Fallback to Wikipedia on PHP error
+        markNotFound();
       });
   }
 
